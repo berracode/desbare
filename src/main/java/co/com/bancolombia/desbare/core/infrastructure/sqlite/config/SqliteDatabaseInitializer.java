@@ -15,7 +15,7 @@ public class SqliteDatabaseInitializer {
     public void initialize() {
 
         String sql = """
-                CREATE TABLE gpg_keys (
+                CREATE TABLE IF NOT EXISTS gpg_keys (
                      id INTEGER PRIMARY KEY AUTOINCREMENT,
                      name TEXT NOT NULL,
                      email TEXT NOT NULL,

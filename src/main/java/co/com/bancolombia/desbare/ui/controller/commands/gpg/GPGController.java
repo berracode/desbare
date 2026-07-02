@@ -66,8 +66,9 @@ public class GPGController {
 
                 if (type == CreateKeyController.class) {
                     log.info("Creando instancia de CreateKeyController");
-                    return new CreateKeyController(bootstrap.createKeyViewModel()
-                    );
+                    return new CreateKeyController(bootstrap.createKeyViewModel());
+                } else if (type == EncryptController.class) {
+                    return new EncryptController(bootstrap.encryptViewModel());
                 }
 
                 try {

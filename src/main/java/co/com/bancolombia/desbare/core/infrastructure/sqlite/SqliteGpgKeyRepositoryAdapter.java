@@ -2,6 +2,8 @@ package co.com.bancolombia.desbare.core.infrastructure.sqlite;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
@@ -57,7 +59,54 @@ public class SqliteGpgKeyRepositoryAdapter implements GpgKeyRepositoryPort {
 
     @Override
     public Optional<GpgKey> findByFingerprint(String fingerprint) {
-        return Optional.empty();
+
+        String sql = """
+                SELECT
+                    id,
+                    name,
+                    email,
+                    fingerprint,
+                    public_key,
+                    private_key
+                FROM gpg_keys
+                WHERE fingerprint = ?
+                """;
+
+        try (
+                Connection connection = dataSource.getConnection();
+                PreparedStatement statement =
+                        connection.prepareStatement(sql)
+        ) {
+
+            statement.setString(1, fingerprint);
+
+            try (ResultSet rs = statement.executeQuery()) {
+
+                if (rs.next()) {
+
+                    GpgKey key = new GpgKey(
+                            rs.getLong("id"),
+                            rs.getString("name"),
+                            rs.getString("email"),
+                            rs.getString("public_key"),
+                            rs.getString("private_key"),
+                            rs.getString("fingerprint")
+
+                    );
+
+                    return Optional.of(key);
+                }
+
+                return Optional.empty();
+            }
+
+        } catch (SQLException e) {
+
+            throw new RuntimeException(
+                    "Error consultando fingerprint: " + fingerprint,
+                    e
+            );
+        }
     }
 
     @Override
