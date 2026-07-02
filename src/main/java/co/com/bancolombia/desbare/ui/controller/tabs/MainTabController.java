@@ -67,6 +67,7 @@ public class MainTabController {
 
         var fxmlPath = resolveFxmlPath(toolTab.getName());
         try {
+            log.info("Inicia carga de: {}", fxmlPath);
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 
 //            loader.setControllerFactory(type -> {
@@ -89,7 +90,8 @@ public class MainTabController {
             toolMainTabPane.getSelectionModel().select(tab);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error cargando /fxml/tabs/toolTab-tab-content.fxml", e);
+            log.error("Error en el main tab controller, al añadir una tab al maintab tool: {}", e.getMessage(), e);
+            throw new RuntimeException("Error cargando", e);
         }
     }
 

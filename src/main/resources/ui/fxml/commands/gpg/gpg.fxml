@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
+            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.GPGController"
             prefHeight="400.0" prefWidth="600.0">
 
-    <Label text="HOLA DESDE GPG"/>
+    <VBox layoutY="32.0" prefHeight="686.0" prefWidth="1002.0" spacing="4" style="-fx-background-color: #2B2B2B;"
+          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="4">
+
+        <!-- TabPane de comandos -->
+        <TabPane fx:id="commandTabPane"
+                 prefHeight="37.0" prefWidth="469.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <Tab style="-fx-pref-height: 37px;" text="Generar llave publica"/>
+            <Tab style="-fx-pref-height: 37px;" text="Cifrar"/>
+            <Tab style="-fx-pref-height: 37px;" text="Descifrar"/>
+            <Tab style="-fx-pref-height: 37px;" text="Listar llaves"/>
+        </TabPane>
+    </VBox>
 
 </AnchorPane>
