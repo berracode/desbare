@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<SplitPane xmlns:fx="http://javafx.com/fxml/1"
+           dividerPositions="0.85"
+           fx:id="debugSplitPane"
+           prefHeight="720.0"
+           prefWidth="1280.0"
+           orientation="VERTICAL"
+           xmlns="http://javafx.com/javafx/23.0.1"
+           fx:controller="co.com.bancolombia.desbare.ui.controller.MainController">
+
+    <!-- Split horizontal principal -->
+    <SplitPane dividerPositions="0.2"
+               fx:id="mainSplitPane"
+               styleClass="main2-split-pane">
+        <fx:include source="sidebar/sidebar-view.fxml"/>
+        <fx:include source="tabs/main-tab-view.fxml"/>
+    </SplitPane>
+
+    <!-- Panel de depuración de estados -->
+    <!--<fx:include source="debug/state-debug-view.fxml"/>-->
+
+</SplitPane>

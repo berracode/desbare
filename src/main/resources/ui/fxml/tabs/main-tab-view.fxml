@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            xmlns="http://javafx.com/javafx"
+            minHeight="0.0"
+            fx:id="mainContent" minWidth="0.0" prefHeight="160.0" prefWidth="100.0"
+            styleClass="tabsAnchorPane">
+
+    <VBox prefHeight="26.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <children>
+            <TabPane styleClass="scrollable-tab-pane" fx:id="deploymentTabPane" tabClosingPolicy="SELECTED_TAB"
+                     VBox.vgrow="ALWAYS"/>
+        </children>
+    </VBox>
+</AnchorPane>
