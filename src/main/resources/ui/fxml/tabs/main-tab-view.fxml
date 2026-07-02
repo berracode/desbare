@@ -6,13 +6,14 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
             minHeight="0.0"
+            fx:controller="co.com.bancolombia.desbare.ui.controller.tabs.MainTabController"
             fx:id="mainContent" minWidth="0.0" prefHeight="160.0" prefWidth="100.0"
             styleClass="tabsAnchorPane">
 
     <VBox prefHeight="26.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
-            <TabPane styleClass="scrollable-tab-pane" fx:id="deploymentTabPane" tabClosingPolicy="SELECTED_TAB"
+            <TabPane fx:id="toolMainTabPane" tabClosingPolicy="SELECTED_TAB"
                      VBox.vgrow="ALWAYS"/>
         </children>
     </VBox>
