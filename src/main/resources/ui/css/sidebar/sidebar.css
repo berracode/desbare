@@ -1,3 +1,14 @@
 .vbox, .hbox {
     -fx-background-color: #2f3542;
 }
+
+.tool-button {
+    -fx-background-color: #57606f;
+    -fx-text-fill: white;
+}
+
+.tool-active {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}

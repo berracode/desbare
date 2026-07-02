@@ -17,8 +17,8 @@
     <Label text="Herramientas" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
     <Separator orientation="HORIZONTAL" style="-fx-opacity: 0.4;"/>
 
-    <Button fx:id="btnGpg" maxWidth="Infinity" text="GPG" style="-fx-background-color: #57606f;-fx-text-fill: white;"
+    <Button fx:id="btnGpg" maxWidth="Infinity" text="GPG" styleClass="tool-button"
             onAction="#handleOpenGpg"/>
     <Button fx:id="btnBase64" maxWidth="Infinity" text="Base64"
-            style="-fx-background-color: #57606f;-fx-text-fill: white;" onAction="#handleOpenBase64"/>
+            styleClass="tool-button" onAction="#handleOpenBase64"/>
 </VBox>

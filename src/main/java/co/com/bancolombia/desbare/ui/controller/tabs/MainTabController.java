@@ -26,19 +26,22 @@ public class MainTabController {
 
     @FXML
     public void initialize() {
+        log.info("Inicializando MainTabController");
 
         mainTabsViewModel.toolTabProperty()
                 .addListener((obs, old, selected) -> {
-                    log.info("selected deployment para deployment tab: {}", selected.getName());
+                    log.info("herramienta seleccionada: {}", selected.getName());
                     if (selected != null) {
-                        log.info("Abriendo el deploymentStateView model con el nuevo deployment seleccionado: " +
-                                         "{}", selected.getName());
+                        log.info("Abriendo el tab con la herramienta seleccionado: " + "{}", selected.getName());
 
                         openDeploymentTab(selected);
                     }
                 });
 
+        // Necesario para actualizar el view model con el tab seleccionado desde el tab pane y poder cambiar color en
+        // el sidebar
         toolMainTabPane.getSelectionModel().selectedItemProperty().addListener((obs, old, selectedTab) -> {
+            log.info("Tab seleccionado DIRECTAMENTE en el tab pane");
             if (selectedTab != null) {
                 Object userData = selectedTab.getUserData();
                 if (userData instanceof ToolTab toolTab) {
@@ -62,7 +65,6 @@ public class MainTabController {
             return;
         }
 
-        log.info("Instanciando DeploymentTabItemViewModel");
         var fxmlPath = resolveFxmlPath(toolTab.getName());
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
