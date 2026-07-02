@@ -1,18 +1,23 @@
 package co.com.bancolombia.desbare.ui.viewmodel.gpg;
 
-import co.com.bancolombia.desbare.core.domain.model.GpgKey;
+import co.com.bancolombia.desbare.core.domain.enums.ExpirationUnit;
+import co.com.bancolombia.desbare.core.domain.enums.KeyType;
+import co.com.bancolombia.desbare.core.domain.model.GenerateKeyRequest;
 import co.com.bancolombia.desbare.core.domain.usecase.GenerateKeyUseCase;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
-@Getter
-public class CreateKeyViewModel {
 
-    private final GenerateKeyUseCase generateKeyUseCase;
+@Getter
+@RequiredArgsConstructor
+public class CreateKeyViewModel {
 
     private final StringProperty name =
             new SimpleStringProperty();
@@ -24,19 +29,48 @@ public class CreateKeyViewModel {
             new SimpleStringProperty();
 
     private final StringProperty status =
-            new SimpleStringProperty("None");
+            new SimpleStringProperty("Ready");
+
+    private final ObjectProperty<Integer> keySize =
+            new SimpleObjectProperty<>(4096);
+
+    private final BooleanProperty neverExpire =
+            new SimpleBooleanProperty(true);
+
+    private final ObjectProperty<Integer> expirationAmount =
+            new SimpleObjectProperty<>(1);
+
+    private final ObjectProperty<ExpirationUnit> expirationUnit = new SimpleObjectProperty<>(ExpirationUnit.YEARS);
+
+    private final ObjectProperty<KeyType> keyType =
+            new SimpleObjectProperty<>(KeyType.RSA_RSA);
+
+    private final GenerateKeyUseCase useCase;
 
     public void generate() {
 
-        GpgKey key = generateKeyUseCase.execute(
-                name.get(),
-                email.get(),
-                passphrase.get()
-        );
+        GenerateKeyRequest request =
+                GenerateKeyRequest.builder()
+                        .name(name.get())
+                        .email(email.get())
+                        .passphrase(passphrase.get())
+                        .keyType(keyType.get())
+                        .keySize(keySize.get())
+                        .neverExpire(neverExpire.get())
+                        .expirationAmount(
+                                expirationAmount.get()
+                        )
+                        .expirationUnit(
+                                expirationUnit.get()
+                        )
+                        .build();
+
+        var result =
+                useCase.execute(request);
 
         status.set(
-                "Llave creada: " +
-                        key.fingerprint()
+                "Key generated: "
+                        + result.fingerprint()
         );
     }
 }

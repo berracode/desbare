@@ -1,5 +1,6 @@
 package co.com.bancolombia.desbare.core.domain.usecase;
 
+import co.com.bancolombia.desbare.core.domain.model.GenerateKeyRequest;
 import co.com.bancolombia.desbare.core.domain.model.GeneratedKeyPair;
 import co.com.bancolombia.desbare.core.domain.model.GpgKey;
 import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgGeneratorPort;
@@ -14,18 +15,16 @@ public class GenerateKeyUseCase {
     private final GpgKeyRepositoryPort repositoryPort;
 
     public GpgKey execute(
-            String name,
-            String email,
-            String passphrase
+            GenerateKeyRequest generateKeyRequest
     ) {
 
         GeneratedKeyPair pair =
-                generatorPort.generate(name, email, passphrase);
+                generatorPort.generate(generateKeyRequest);
 
         GpgKey key = new GpgKey(
                 null,
-                name,
-                email,
+                generateKeyRequest.name(),
+                generateKeyRequest.email(),
                 pair.publicKey(),
                 pair.privateKey(),
                 pair.fingerprint()

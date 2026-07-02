@@ -8,19 +8,24 @@ import java.util.Iterator;
 
 import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgDecryptionPort;
 
+import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.openpgp.PGPCompressedData;
 import org.bouncycastle.openpgp.PGPEncryptedDataList;
 import org.bouncycastle.openpgp.PGPLiteralData;
 import org.bouncycastle.openpgp.PGPObjectFactory;
+import org.bouncycastle.openpgp.PGPOnePassSignatureList;
 import org.bouncycastle.openpgp.PGPPrivateKey;
 import org.bouncycastle.openpgp.PGPPublicKeyEncryptedData;
 import org.bouncycastle.openpgp.PGPSecretKey;
 import org.bouncycastle.openpgp.PGPSecretKeyRing;
 import org.bouncycastle.openpgp.PGPSecretKeyRingCollection;
+import org.bouncycastle.openpgp.PGPSignatureList;
 import org.bouncycastle.openpgp.PGPUtil;
 import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.bouncycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactoryBuilder;
 
+@Slf4j
 public class BouncyCastleDecryptionAdapter
         implements GpgDecryptionPort {
 
@@ -56,7 +61,6 @@ public class BouncyCastleDecryptionAdapter
             Object object = factory.nextObject();
 
             PGPEncryptedDataList encryptedDataList;
-
             if (object instanceof PGPEncryptedDataList list) {
                 encryptedDataList = list;
             } else {
@@ -114,10 +118,12 @@ public class BouncyCastleDecryptionAdapter
                             new JcaKeyFingerprintCalculator()
                     );
 
-            Object message =
-                    plainFactory.nextObject();
 
-            if (message instanceof PGPLiteralData literalData) {
+            PGPLiteralData literalData1 =
+                    extractLiteralData(plainFactory);
+
+
+            if (literalData1 instanceof PGPLiteralData literalData) {
 
                 InputStream data =
                         literalData.getInputStream();
@@ -139,6 +145,42 @@ public class BouncyCastleDecryptionAdapter
                     e
             );
         }
+    }
+
+    private PGPLiteralData extractLiteralData(
+            PGPObjectFactory factory
+    ) throws Exception {
+
+        Object object;
+
+        while ((object = factory.nextObject()) != null) {
+
+            if (object instanceof PGPCompressedData compressed) {
+
+                factory = new PGPObjectFactory(
+                        compressed.getDataStream(),
+                        new JcaKeyFingerprintCalculator()
+                );
+
+                continue;
+            }
+
+            if (object instanceof PGPOnePassSignatureList) {
+                continue;
+            }
+
+            if (object instanceof PGPSignatureList) {
+                continue;
+            }
+
+            if (object instanceof PGPLiteralData literal) {
+                return literal;
+            }
+        }
+
+        throw new IllegalStateException(
+                "No se encontró PGPLiteralData"
+        );
     }
 
     private PGPSecretKeyRing readSecretKeyRing(
