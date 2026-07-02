@@ -10,7 +10,8 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
       spacing="15"
-      style="-fx-background-color: #2B2B2B;">
+      style="-fx-background-color: #2B2B2B;"
+      fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.CreateKeyController">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -22,13 +23,13 @@
     <GridPane hgap="10" vgap="10">
 
         <Label text="Nombre:" style="-fx-text-fill:white;" GridPane.rowIndex="0"/>
-        <TextField promptText="Juan Hernandez"
+        <TextField fx:id="txtName" promptText="Juan Hernandez"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="0"/>
 
         <Label text="Email:" style="-fx-text-fill:white;"
                GridPane.rowIndex="1"/>
-        <TextField promptText="usuario@correo.com"
+        <TextField fx:id="txtEmail" promptText="usuario@correo.com"
                    GridPane.columnIndex="1"
                    GridPane.rowIndex="1"/>
 
@@ -36,6 +37,7 @@
                style="-fx-text-fill:white;"
                GridPane.rowIndex="2"/>
         <PasswordField
+                fx:id="txtPassphrase"
                 GridPane.columnIndex="1"
                 GridPane.rowIndex="2"/>
 

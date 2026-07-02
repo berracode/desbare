@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx"
-            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.GPGController"
+            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.GPGController"
             prefHeight="400.0" prefWidth="600.0">
 
     <VBox layoutY="32.0" prefHeight="686.0" prefWidth="1002.0" spacing="4" style="-fx-background-color: #2B2B2B;"

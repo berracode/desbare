@@ -9,7 +9,8 @@
 <VBox xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
       spacing="12"
-      style="-fx-background-color:#2B2B2B;">
+      style="-fx-background-color:#2B2B2B;"
+      fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.EncryptController">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -18,14 +19,14 @@
     <Label text="Cifrar Texto"
            style="-fx-text-fill:white;-fx-font-size:18px;-fx-font-weight:bold;"/>
 
-    <TextField promptText="Email o identificador de la llave pública"/>
+    <TextField fx:id="txtRecipient" promptText="Email o identificador de la llave pública"/>
 
-    <TextArea promptText="Texto a cifrar"
+    <TextArea fx:id="txtPlainText" promptText="Texto a cifrar"
               prefHeight="180"/>
 
-    <Button text="Cifrar"/>
+    <Button onAction="#handleEncrypt" text="Cifrar"/>
 
-    <TextArea promptText="Resultado cifrado"
+    <TextArea fx:id="txtEncrypted" promptText="Resultado cifrado"
               editable="false"
               prefHeight="180"/>
 </VBox>

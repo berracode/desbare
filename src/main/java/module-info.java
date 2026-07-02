@@ -20,8 +20,8 @@ module co.com.bancolombia.desbare {
     exports co.com.bancolombia.desbare.ui.controller.tabs; // opcional
     opens co.com.bancolombia.desbare.ui.controller.tabs to javafx.fxml;
 
-    exports co.com.bancolombia.desbare.ui.controller.commands; // opcional
-    opens co.com.bancolombia.desbare.ui.controller.commands to javafx.fxml;
+    exports co.com.bancolombia.desbare.ui.controller.commands.gpg;
+    opens co.com.bancolombia.desbare.ui.controller.commands.gpg to javafx.fxml;
 
 
 }

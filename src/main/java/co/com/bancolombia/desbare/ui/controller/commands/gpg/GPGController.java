@@ -1,4 +1,4 @@
-package co.com.bancolombia.desbare.ui.controller.commands;
+package co.com.bancolombia.desbare.ui.controller.commands.gpg;
 
 import java.io.IOException;
 
