@@ -41,7 +41,12 @@
                 GridPane.columnIndex="1"
                 GridPane.rowIndex="2"/>
 
+        <Label text="Estado" style="-fx-text-fill:white;" GridPane.rowIndex="3"/>
+        <Label fx:id="lblStatus" text="None" style="-fx-text-fill:white;" GridPane.columnIndex="1"
+               GridPane.rowIndex="3"/>
+
+
     </GridPane>
 
-    <Button text="Generar Llave"/>
+    <Button onAction="#handleGenerateKey" text="Generar Llave"/>
 </VBox>

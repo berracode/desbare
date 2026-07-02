@@ -1,6 +1,6 @@
 package co.com.bancolombia.desbare.ui.controller.sidebar;
 
-import co.com.bancolombia.desbare.core.model.ToolTab;
+import co.com.bancolombia.desbare.core.domain.model.ToolTab;
 import co.com.bancolombia.desbare.ui.viewmodel.tabs.MainTabsViewModel;
 
 import javafx.fxml.FXML;

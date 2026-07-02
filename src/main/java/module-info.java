@@ -1,11 +1,13 @@
 module co.com.bancolombia.desbare {
     requires javafx.controls;
     requires javafx.fxml;
+
     requires org.slf4j;
-
-
     requires org.controlsfx.controls;
     requires static lombok;
+    requires org.xerial.sqlitejdbc;
+    requires org.bouncycastle.pg;
+    requires org.bouncycastle.provider;
 
     opens co.com.bancolombia.desbare to javafx.fxml;
     exports co.com.bancolombia.desbare;

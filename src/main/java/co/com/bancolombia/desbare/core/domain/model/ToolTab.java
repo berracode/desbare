@@ -1,4 +1,4 @@
-package co.com.bancolombia.desbare.core.model;
+package co.com.bancolombia.desbare.core.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

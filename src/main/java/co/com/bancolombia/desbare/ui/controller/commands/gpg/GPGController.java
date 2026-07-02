@@ -2,6 +2,8 @@ package co.com.bancolombia.desbare.ui.controller.commands.gpg;
 
 import java.io.IOException;
 
+import co.com.bancolombia.desbare.bootstrap.AppBootstrap;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -56,6 +58,26 @@ public class GPGController {
             log.info("full path {}", fullPath);
 
             FXMLLoader loader = new FXMLLoader(fullPath);
+
+            loader.setControllerFactory(type -> {
+
+                AppBootstrap bootstrap =
+                        AppBootstrap.getInstance();
+
+                if (type == CreateKeyController.class) {
+                    log.info("Creando instancia de CreateKeyController");
+                    return new CreateKeyController(bootstrap.createKeyViewModel()
+                    );
+                }
+
+                try {
+                    return type.getDeclaredConstructor()
+                            .newInstance();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
 
             // Ejemplo de controller factory manual:
 //            loader.setControllerFactory(type -> {

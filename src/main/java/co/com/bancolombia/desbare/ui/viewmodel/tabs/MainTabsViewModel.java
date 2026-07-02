@@ -1,6 +1,6 @@
 package co.com.bancolombia.desbare.ui.viewmodel.tabs;
 
-import co.com.bancolombia.desbare.core.model.ToolTab;
+import co.com.bancolombia.desbare.core.domain.model.ToolTab;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

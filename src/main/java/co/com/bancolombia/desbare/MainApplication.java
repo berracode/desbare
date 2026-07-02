@@ -2,6 +2,7 @@ package co.com.bancolombia.desbare;
 
 import java.io.IOException;
 
+import co.com.bancolombia.desbare.bootstrap.AppBootstrap;
 import co.com.bancolombia.desbare.ui.controller.sidebar.SidebarController;
 import co.com.bancolombia.desbare.ui.controller.tabs.MainTabController;
 import co.com.bancolombia.desbare.ui.viewmodel.tabs.MainTabsViewModel;
@@ -25,6 +26,8 @@ public class MainApplication extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/fxml/main.fxml"));
 
         MainTabsViewModel mainTabViewModel = new MainTabsViewModel();
+
+        AppBootstrap bootstrap = AppBootstrap.getInstance();
 
         loader.setControllerFactory(type -> {
             if (type == SidebarController.class) {
