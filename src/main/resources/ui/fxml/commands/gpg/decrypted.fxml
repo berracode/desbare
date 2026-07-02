@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       xmlns="http://javafx.com/javafx"
@@ -19,6 +20,8 @@
     <Label text="Descifrar Texto"
            style="-fx-text-fill:white;-fx-font-size:18px;-fx-font-weight:bold;"/>
 
+    <TextField fx:id="txtFingerprint" promptText="identificador de la llave pública"/>
+    
     <PasswordField fx:id="txtPassphrase" promptText="Passphrase"/>
 
     <TextArea fx:id="txtEncryptedText" promptText="Texto cifrado"

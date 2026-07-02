@@ -2,165 +2,178 @@ package co.com.bancolombia.desbare.core.infrastructure.gpg;
 
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Iterator;
 
-import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgEncryptionPort;
+import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgDecryptionPort;
 
-import org.bouncycastle.bcpg.ArmoredInputStream;
-import org.bouncycastle.bcpg.ArmoredOutputStream;
-import org.bouncycastle.openpgp.PGPEncryptedData;
-import org.bouncycastle.openpgp.PGPEncryptedDataGenerator;
+import org.bouncycastle.openpgp.PGPEncryptedDataList;
 import org.bouncycastle.openpgp.PGPLiteralData;
-import org.bouncycastle.openpgp.PGPLiteralDataGenerator;
-import org.bouncycastle.openpgp.PGPPublicKey;
-import org.bouncycastle.openpgp.PGPPublicKeyRing;
-import org.bouncycastle.openpgp.PGPPublicKeyRingCollection;
+import org.bouncycastle.openpgp.PGPObjectFactory;
+import org.bouncycastle.openpgp.PGPPrivateKey;
+import org.bouncycastle.openpgp.PGPPublicKeyEncryptedData;
+import org.bouncycastle.openpgp.PGPSecretKey;
+import org.bouncycastle.openpgp.PGPSecretKeyRing;
+import org.bouncycastle.openpgp.PGPSecretKeyRingCollection;
 import org.bouncycastle.openpgp.PGPUtil;
 import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
-import org.bouncycastle.openpgp.operator.jcajce.JcePGPDataEncryptorBuilder;
-import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyKeyEncryptionMethodGenerator;
+import org.bouncycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
+import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactoryBuilder;
 
-public class BouncyCastleEncryptionAdapter
-        implements GpgEncryptionPort {
+public class BouncyCastleDecryptionAdapter
+        implements GpgDecryptionPort {
 
     @Override
-    public String encrypt(
-            String plainText,
-            String armoredPublicKey
+    public String decrypt(
+            String encryptedText,
+            String armoredPrivateKey,
+            String passphrase
     ) {
 
         try {
 
-            PGPPublicKey publicKey =
-                    readEncryptionKey(armoredPublicKey);
+            PGPSecretKeyRing secretKeyRing =
+                    readSecretKeyRing(
+                            armoredPrivateKey
+                    );
 
-            ByteArrayOutputStream encryptedOut =
-                    new ByteArrayOutputStream();
-
-            try (
-                    ArmoredOutputStream armoredOutput =
-                            new ArmoredOutputStream(encryptedOut)
-            ) {
-
-                PGPEncryptedDataGenerator encryptedDataGenerator =
-                        new PGPEncryptedDataGenerator(
-                                new JcePGPDataEncryptorBuilder(
-                                        PGPEncryptedData.AES_256
-                                )
-                                        .setSecureRandom(
-                                                new SecureRandom()
-                                        )
-                                        .setWithIntegrityPacket(true)
-                        );
-
-                encryptedDataGenerator.addMethod(
-                        new JcePublicKeyKeyEncryptionMethodGenerator(
-                                publicKey
-                        )
-                );
-
-                ByteArrayOutputStream literalData =
-                        new ByteArrayOutputStream();
-
-                PGPLiteralDataGenerator literalDataGenerator =
-                        new PGPLiteralDataGenerator();
-
-                try (OutputStream literalOut =
-                             literalDataGenerator.open(
-                                     literalData,
-                                     PGPLiteralData.BINARY,
-                                     PGPLiteralData.CONSOLE,
-                                     plainText.getBytes().length,
-                                     Date.valueOf(LocalDate.now())
-                             )) {
-
-                    literalOut.write(
-                            plainText.getBytes(
-                                    StandardCharsets.UTF_8
+            InputStream decoderStream =
+                    PGPUtil.getDecoderStream(
+                            new ByteArrayInputStream(
+                                    encryptedText.getBytes(
+                                            StandardCharsets.UTF_8
+                                    )
                             )
                     );
-                }
 
-                byte[] bytes = literalData.toByteArray();
+            PGPObjectFactory factory =
+                    new PGPObjectFactory(
+                            decoderStream,
+                            new JcaKeyFingerprintCalculator()
+                    );
 
-                try (
-                        OutputStream encryptedStream =
-                                encryptedDataGenerator.open(
-                                        armoredOutput,
-                                        bytes.length
-                                )
-                ) {
+            Object object = factory.nextObject();
 
-                    encryptedStream.write(bytes);
+            PGPEncryptedDataList encryptedDataList;
+
+            if (object instanceof PGPEncryptedDataList list) {
+                encryptedDataList = list;
+            } else {
+                encryptedDataList =
+                        (PGPEncryptedDataList)
+                                factory.nextObject();
+            }
+
+            PGPPrivateKey privateKey = null;
+            PGPPublicKeyEncryptedData encryptedData = null;
+
+            Iterator<?> iterator =
+                    encryptedDataList.getEncryptedDataObjects();
+
+            while (iterator.hasNext()) {
+
+                PGPPublicKeyEncryptedData candidate =
+                        (PGPPublicKeyEncryptedData)
+                                iterator.next();
+
+                PGPSecretKey secretKey =
+                        secretKeyRing.getSecretKey(
+                                candidate.getKeyID()
+                        );
+
+                if (secretKey != null) {
+
+                    privateKey =
+                            extractPrivateKey(
+                                    secretKey,
+                                    passphrase
+                            );
+
+                    encryptedData = candidate;
+
+                    break;
                 }
             }
 
-            return encryptedOut.toString(
-                    StandardCharsets.UTF_8
+            if (privateKey == null) {
+                throw new IllegalArgumentException(
+                        "No se encontró la llave privada."
+                );
+            }
+
+            InputStream clearData =
+                    encryptedData.getDataStream(
+                            new JcePublicKeyDataDecryptorFactoryBuilder()
+                                    .build(privateKey)
+                    );
+
+            PGPObjectFactory plainFactory =
+                    new PGPObjectFactory(
+                            clearData,
+                            new JcaKeyFingerprintCalculator()
+                    );
+
+            Object message =
+                    plainFactory.nextObject();
+
+            if (message instanceof PGPLiteralData literalData) {
+
+                InputStream data =
+                        literalData.getInputStream();
+
+                return new String(
+                        data.readAllBytes(),
+                        StandardCharsets.UTF_8
+                );
+            }
+
+            throw new IllegalStateException(
+                    "Contenido PGP no soportado."
             );
 
         } catch (Exception e) {
+
             throw new RuntimeException(
-                    "Error cifrando contenido",
+                    "Error descifrando mensaje",
                     e
             );
         }
     }
 
-    private PGPPublicKey readEncryptionKey(
-            String armoredPublicKey
+    private PGPSecretKeyRing readSecretKeyRing(
+            String armoredPrivateKey
     ) throws Exception {
 
-        try (
-                InputStream in =
-                        new ArmoredInputStream(
-                                new ByteArrayInputStream(
-                                        armoredPublicKey.getBytes(
-                                                StandardCharsets.UTF_8
-                                        )
+        InputStream in =
+                PGPUtil.getDecoderStream(
+                        new ByteArrayInputStream(
+                                armoredPrivateKey.getBytes(
+                                        StandardCharsets.UTF_8
                                 )
                         )
-        ) {
+                );
 
-            PGPPublicKeyRingCollection rings =
-                    new PGPPublicKeyRingCollection(
-                            PGPUtil.getDecoderStream(in),
-                            new JcaKeyFingerprintCalculator()
-                    );
+        PGPSecretKeyRingCollection collection =
+                new PGPSecretKeyRingCollection(
+                        in,
+                        new JcaKeyFingerprintCalculator()
+                );
 
-            Iterator<PGPPublicKeyRing> ringIterator =
-                    rings.getKeyRings();
+        return collection.getKeyRings().next();
+    }
 
-            while (ringIterator.hasNext()) {
+    private PGPPrivateKey extractPrivateKey(
+            PGPSecretKey secretKey,
+            String passphrase
+    ) throws Exception {
 
-                PGPPublicKeyRing ring =
-                        ringIterator.next();
-
-                Iterator<PGPPublicKey> keys =
-                        ring.getPublicKeys();
-
-                while (keys.hasNext()) {
-
-                    PGPPublicKey key =
-                            keys.next();
-
-                    if (key.isEncryptionKey()) {
-                        return key;
-                    }
-                }
-            }
-
-            throw new IllegalArgumentException(
-                    "No se encontró una llave de cifrado."
-            );
-        }
+        return secretKey.extractPrivateKey(
+                new JcePBESecretKeyDecryptorBuilder()
+                        .build(
+                                passphrase.toCharArray()
+                        )
+        );
     }
 }
 
