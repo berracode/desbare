@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            minHeight="0.0"
-            fx:controller="co.com.bancolombia.desbare.ui.controller.tabs.MainTabController"
-            fx:id="mainContent" minWidth="0.0" prefHeight="160.0" prefWidth="100.0"
-            styleClass="tabsAnchorPane">
 
-    <VBox prefHeight="26.0" prefWidth="1022.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane fx:id="mainContent" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="250.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.com.bancolombia.desbare.ui.controller.tabs.MainTabController">
+
+    <VBox prefHeight="26.0" prefWidth="172.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <children>
-            <TabPane fx:id="toolMainTabPane" tabClosingPolicy="SELECTED_TAB"
-                     VBox.vgrow="ALWAYS"/>
+            <TabPane fx:id="toolMainTabPane" tabClosingPolicy="SELECTED_TAB" VBox.vgrow="ALWAYS">
+            <tabs>
+               <Tab text="Untitled Tab">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                 </content>
+               </Tab>
+               <Tab text="Untitled Tab">
+                 <content>
+                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                 </content>
+               </Tab>
+            </tabs></TabPane>
         </children>
     </VBox>
 </AnchorPane>

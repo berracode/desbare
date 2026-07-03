@@ -82,3 +82,95 @@
     -fx-border-color: -color-purple-light;
     -fx-border-width: 1px;
 }
+
+/* --- ESTILIZACIÓN DEL TAB PANE (Tema Oscuro / Escala de Grises) --- */
+
+/* Contenedor principal del TabPane */
+.tab-pane {
+    -fx-background-color: -color-bg-main;
+}
+
+/* La barra/cabecera superior (Donde se sientan las pestañas) */
+.tab-pane .tab-header-area {
+    -fx-background-color: transparent; /* Reemplaza la barra blanca por un gris oscuro limpio */
+    -fx-padding: 0px;            /* Espaciado interno sutil */
+    -fx-border-color: transparent transparent -color-border-subtle transparent;
+    -fx-border-width: 0px 0px 1px 0px; /*t r b l*/
+
+
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: transparent; /* Reemplaza la barra blanca por un gris oscuro limpio */
+}
+
+/* La línea base que divide la cabecera del contenido del Tab */
+.tab-pane .tab-header-line {
+    -fx-background-color: -color-border-subtle; /* Línea fina gris */
+}
+
+/* Estilo base para cada Pestaña (Tab) individual */
+.tab-pane .tab {
+    -fx-background-color: transparent;         /* Por defecto flotan sin fondo marcado */
+    -fx-background-insets: 0;
+    -fx-background-radius: 4px 4px 0 0;
+    -fx-padding: 12px 14px;
+    -fx-cursor: hand;
+}
+
+/* Texto dentro de las pestañas */
+.tab-pane .tab .tab-label {
+    -fx-text-fill: -color-text-muted;          /* Texto opaco si la pestaña no está activa */
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+
+}
+
+/* Estado Hover (Al pasar el mouse por encima de un Tab inactivo) */
+.tab-pane .tab:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+}
+.tab-pane .tab:hover .tab-label {
+    -fx-text-fill: -color-text-main;           /* El texto se aclara */
+}
+
+/* Estado Seleccionado (El Tab que está abierto actualmente) */
+.tab-pane .tab:selected {
+    -fx-background-color: -color-bg-main;     /* Se mimetiza con el fondo del contenido principal */
+
+    /* Tu nuevo indicador: Bordes grises laterales/superior, y la línea azul brillante abajo */
+    -fx-border-color: -color-border-subtle -color-border-subtle #1EBFF2 -color-border-subtle;
+    -fx-border-width: 1px 1px 2px 1px;         /* Le damos 2px abajo a la línea azul para que resalte limpia */
+    -fx-border-radius: 4px 4px 0 0;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: -color-text-main;           /* Texto brillante para indicar foco */
+    -fx-font-weight: bold;
+
+}
+
+/* =========================================================================
+   ELIMINAR EL .FOCUS-INDICATOR AZUL NATIVO DE JAVAFX
+   ========================================================================= */
+.tab-pane .tab .focus-indicator {
+    -fx-border-color: transparent !important; /* Mata el color azul del borde */
+    -fx-border-width: 0 !important;            /* Elimina su grosor */
+    -fx-padding: 0 !important;                 /* Evita que altere el tamaño interno */
+    -fx-background-color: transparent !important;
+}
+
+/* El botón de cerrar pestaña (la 'x') */
+.tab-pane .tab .tab-close-button {
+    -fx-background-color: -color-text-muted;  /* Transforma el icono en gris sutil */
+    -fx-cursor: hand;
+}
+.tab-pane .tab .tab-close-button:hover {
+    -fx-background-color: #ff5555;             /* Un rojo suave/cyberpunk clásico solo al pasar el mouse para cerrar */
+}
+
+/* Área interna donde se renderiza el FXML de la herramienta (GPG / Base64) */
+.tab-pane .tab-content-area {
+    -fx-background-color: -color-bg-main;
+    -fx-padding: 5px;                         /* Margen interno para que las herramientas no peguen del borde */
+}
