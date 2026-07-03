@@ -288,3 +288,145 @@
     -fx-text-fill: #1EBFF2; /* Resalta el estado actual con el azul */
     -fx-font-weight: bold;
 }
+
+/* --- COMPONENTES ADICIONALES: TEXT AREA --- */
+
+.text-area {
+    -fx-background-color: -color-bg-input; /* Gris intermedio #1e1e24 */
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-font-family: "Consolas", "Monaco", "Courier New", monospace; /* Fuente monoespaciada tipo código */
+    -fx-font-size: 13px;
+}
+
+/* El truco crucial: Cambiar el fondo del contenedor interno del TextArea */
+.text-area .content {
+    -fx-background-color: -color-bg-input;
+    -fx-text-fill: -color-text-main;
+}
+
+/* Estado enfocado (Cuando el usuario está escribiendo) */
+.text-area:focused {
+    -fx-border-color: -color-border-focus;
+}
+.text-area:focused .content {
+    -fx-background-color: -color-bg-input; /* Mantiene la estabilidad del fondo */
+}
+
+/* --- ESTADO NO EDITABLE / SOLO LECTURA (Corregido y Sólido) --- */
+.text-area:disabled,
+.text-area:readonly,
+.text-area:readonly .content {
+    -fx-opacity: 1.0; /* Forzamos opacidad total para eliminar el efecto lavado */
+
+    /* Usamos un negro grafito puro (#09090b) o el fondo más oscuro (#060209).
+       Esto hace que el fondo caiga al fondo y el azul resalte al 100% */
+    -fx-background-color: #060209 !important;
+
+    /* Tu azul de acento brillante para el resultado cifrado */
+    -fx-text-fill: #1EBFF2 !important;
+
+    /* Un borde sutil para que el cuadro no se pierda por completo en el fondo */
+    -fx-border-color: #16161a !important;
+}
+
+/* Estilizar las barras de scroll internas del TextArea para que no salgan blancas */
+.text-area .scroll-bar:vertical,
+.text-area .scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+.text-area .scroll-bar .thumb {
+    -fx-background-color: -color-border-subtle;
+    -fx-background-radius: 4px;
+}
+.text-area .scroll-bar .thumb:hover {
+    -fx-background-color: -color-border-focus;
+}
+
+
+/* --- BOTONES SECUNDARIOS (Para la barra de herramientas superior) --- */
+.btn-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-text-muted;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px 14px;
+    -fx-cursor: hand;
+}
+.btn-secondary:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-text-fill: -color-text-main;
+    -fx-border-color: -color-border-focus;
+}
+.btn-secondary:focused {
+    -fx-border-color: -color-text-muted;
+}
+
+/* --- JAVAFX TABLE VIEW (Estilo Matrix / Carbón Sólido) --- */
+
+.table-view {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+/* La cabecera superior de la tabla (Donde van los títulos de las columnas) */
+.table-view .column-header-background {
+    -fx-background-color: -color-bg-panel; /* Gris oscuro sólido #16161a */
+    -fx-padding: 0;
+}
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent -color-border-subtle transparent transparent; /* Líneas divisorias sutiles entre columnas */
+    -fx-border-width: 1px;
+    -fx-size: 35px; /* Altura elegante para la cabecera */
+}
+.table-view .column-header .label {
+    -fx-text-fill: -color-text-muted;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+/* Estilo para las Celdas individuales de la tabla */
+.table-cell {
+    -fx-text-fill: -color-text-main;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-padding: 8px 12px;
+    -fx-border-color: transparent transparent -color-border-subtle transparent; /* Línea horizontal sutil abajo de cada fila */
+}
+
+/* Las filas de la tabla (Alternación y estados) */
+.table-row-cell {
+    -fx-background-color: -color-bg-main; /* Fondo negro carbón sólido #0d0d11 */
+}
+/* Filas pares (Opcional, por si quieres alternación sutil, si no, déjalas igual) */
+.table-row-cell:odd {
+    -fx-background-color: #0b0b0e;
+}
+.table-row-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.02); /* Iluminación sutil al pasar el mouse por la fila */
+}
+
+/* Fila Seleccionada (Cuando el usuario da clic en una llave) */
+.table-row-cell:filled:selected {
+    -fx-background-color: -color-bg-input; /* Resalta con un gris intermedio plano */
+}
+.table-row-cell:filled:selected .table-cell {
+    -fx-text-fill: #1EBFF2; /* Las letras de la fila seleccionada brillan en tu azul de acento */
+    -fx-font-weight: 500;
+}
+
+/* Ocultar el espacio vacío extra que genera JavaFX al final de las columnas */
+.table-view .placeholder .label {
+    -fx-text-fill: -color-text-muted;
+}
+.table-view .corner {
+    -fx-background-color: transparent;
+}
