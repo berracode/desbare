@@ -3,132 +3,72 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox xmlns:fx="http://javafx.com/fxml"
-      xmlns="http://javafx.com/javafx"
-      spacing="15"
-      style="-fx-background-color: #2B2B2B;"
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      spacing="16"
+      stylesheets="@../../../css/global.css"
+
       fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.CreateKeyController">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="20" right="24" bottom="24" left="24"/>
     </padding>
 
-    <Label text="Generar Llave Pública"
-           style="-fx-text-fill:white;-fx-font-size:18px;-fx-font-weight:bold;"/>
+    <Label text="Generar Llave Pública" styleClass="sidebar-title"/>
 
-    <GridPane hgap="10" vgap="10">
+    <GridPane hgap="12" vgap="12">
+        <columnConstraints>
+            <ColumnConstraints minWidth="90" prefWidth="100" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
 
-        <Label text="Nombre:"
-               style="-fx-text-fill:white;"
-               GridPane.rowIndex="0"/>
+        <Label text="Nombre:" styleClass="form-label" GridPane.rowIndex="0"/>
+        <TextField fx:id="txtName" promptText="Juan Hernandez" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-        <TextField fx:id="txtName"
-                   promptText="Juan Hernandez"
-                   GridPane.columnIndex="1"
-                   GridPane.rowIndex="0"/>
+        <Label text="Email:" styleClass="form-label" GridPane.rowIndex="1"/>
+        <TextField fx:id="txtEmail" promptText="usuario@correo.com" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <Label text="Email:"
-               style="-fx-text-fill:white;"
-               GridPane.rowIndex="1"/>
-
-        <TextField fx:id="txtEmail"
-                   promptText="usuario@correo.com"
-                   GridPane.columnIndex="1"
-                   GridPane.rowIndex="1"/>
-
-        <Label text="Passphrase:"
-               style="-fx-text-fill:white;"
-               GridPane.rowIndex="2"/>
-
-        <PasswordField fx:id="txtPassphrase"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="2"/>
-
+        <Label text="Passphrase:" styleClass="form-label" GridPane.rowIndex="2"/>
+        <PasswordField fx:id="txtPassphrase" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
     </GridPane>
 
     <Separator/>
 
-    <Label text="Tipo de llave"
-           style="-fx-text-fill:white;-fx-font-weight:bold;"/>
+    <Label text="Tipo de llave" styleClass="section-title"/>
 
-    <VBox spacing="5">
-
-        <RadioButton fx:id="rbRsaRsa"
-                     selected="true"
-                     text="RSA and RSA (default)"
-                     style="-fx-text-fill:white;"/>
-
-        <RadioButton fx:id="rbDsaElgamal"
-                     disable="true"
-                     text="DSA and Elgamal"
-                     style="-fx-text-fill:grey;"/>
-
-        <RadioButton fx:id="rbDsaSignOnly"
-                     disable="true"
-                     text="DSA (sign only)"
-                     style="-fx-text-fill:grey;"/>
-
-        <RadioButton fx:id="rbRsaSignOnly"
-                     disable="true"
-                     text="RSA (sign only)"
-                     style="-fx-text-fill:grey;"/>
-
-        <RadioButton fx:id="rbExistingKey"
-                     disable="true"
-                     text="Existing key from card"
-                     style="-fx-text-fill:grey;"/>
-
+    <VBox spacing="8">
+        <RadioButton fx:id="rbRsaRsa" selected="true" text="RSA and RSA (default)"/>
+        <RadioButton fx:id="rbDsaElgamal" disable="true" text="DSA and Elgamal"/>
+        <RadioButton fx:id="rbDsaSignOnly" disable="true" text="DSA (sign only)"/>
+        <RadioButton fx:id="rbRsaSignOnly" disable="true" text="RSA (sign only)"/>
+        <RadioButton fx:id="rbExistingKey" disable="true" text="Existing key from card"/>
     </VBox>
 
-    <GridPane hgap="10" vgap="10">
-
-        <Label text="RSA Size:"
-               style="-fx-text-fill:white;"
-               GridPane.rowIndex="0"/>
-
-        <ComboBox fx:id="cbKeySize"
-                  prefWidth="180"
-                  GridPane.columnIndex="1"
-                  GridPane.rowIndex="0"/>
-
+    <GridPane hgap="12" vgap="12">
+        <Label text="RSA Size:" styleClass="form-label" GridPane.rowIndex="0"/>
+        <ComboBox fx:id="cbKeySize" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
     </GridPane>
 
     <Separator/>
 
-    <Label text="Expiración"
-           style="-fx-text-fill:white;-fx-font-weight:bold;"/>
+    <Label text="Expiración" styleClass="section-title"/>
 
     <HBox spacing="10">
-
-        <CheckBox fx:id="chkNeverExpire"
-                  selected="true"
-                  text="No expira"/>
-
+        <CheckBox fx:id="chkNeverExpire" selected="true" text="No expira"/>
     </HBox>
 
     <HBox spacing="10">
-
-        <ComboBox fx:id="cbExpireAmount"
-                  prefWidth="80"/>
-
-        <ComboBox fx:id="cbExpireUnit"
-                  prefWidth="120"/>
-
+        <ComboBox fx:id="cbExpireAmount" prefWidth="80"/>
+        <ComboBox fx:id="cbExpireUnit" prefWidth="120"/>
     </HBox>
 
-    <GridPane hgap="10" vgap="10">
-
-        <Label text="Estado"
-               style="-fx-text-fill:white;"
-               GridPane.rowIndex="0"/>
-
-        <Label fx:id="lblStatus"
-               text="None"
-               style="-fx-text-fill:white;"
-               GridPane.columnIndex="1"
-               GridPane.rowIndex="0"/>
-
+    <GridPane hgap="12" vgap="12">
+        <Label text="Estado:" styleClass="form-label" GridPane.rowIndex="0"/>
+        <Label fx:id="lblStatus" text="None" styleClass="status-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
     </GridPane>
 
-    <Button onAction="#handleGenerateKey" text="Generar Llave"/>
+    <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+
+    <Button onAction="#handleGenerateKey" text="Generar Llave" styleClass="btn-primary" maxWidth="200"/>
 </VBox>

@@ -174,3 +174,117 @@
     -fx-background-color: -color-bg-main;
     -fx-padding: 5px;                         /* Margen interno para que las herramientas no peguen del borde */
 }
+
+
+/* --- COMPONENTES DE FORMULARIO PARA TEMA OSCURO --- */
+
+/* --- COMBO BOX (Desplegables) --- */
+.combo-box {
+    -fx-background-color: -color-bg-input;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 2px;
+
+}
+
+.combo-box:focused {
+    -fx-border-color: -color-border-focus;
+}
+/* El texto dentro del ComboBox cerrado */
+.combo-box .label {
+    -fx-text-fill: -color-text-main;
+}
+/* La pequeña flecha del ComboBox */
+.combo-box .arrow {
+    -fx-background-color: -color-text-muted;
+}
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+/* La lista desplegable flotante */
+.combo-box-popup .list-view {
+    -fx-background-color: -color-bg-panel;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px;
+}
+.combo-box-popup .list-cell {
+    -fx-text-fill: -color-text-main !important;
+    -fx-background-color: transparent;
+    -fx-padding: 6px 12px;
+}
+.combo-box-popup .list-cell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: -color-bg-input;
+    -fx-text-fill: -color-text-main !important; /* Forzamos tu blanco/gris claro */
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: -color-text-main !important; /* Forzamos tu blanco/gris claro */
+}
+
+
+
+
+/* --- RADIO BUTTON --- */
+.radio-button {
+    -fx-text-fill: -color-text-main;
+    -fx-cursor: hand;
+}
+/* El círculo externo */
+.radio-button .radio {
+    -fx-background-color: -color-bg-input;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+}
+/* El punto interno cuando está seleccionado */
+.radio-button:selected .radio .dot {
+    -fx-background-color: #1EBFF2; /* Tu azul de acento para mantener coherencia */
+    -fx-background-insets: 1px;
+}
+/* Estado deshabilitado (Para las opciones bloqueadas) */
+.radio-button:disabled {
+    -fx-opacity: 0.4;
+}
+.radio-button:disabled .label {
+    -fx-text-fill: -color-text-muted;
+}
+
+
+/* --- CHECK BOX --- */
+.check-box {
+    -fx-text-fill: -color-text-main;
+    -fx-cursor: hand;
+}
+/* El cuadro externo */
+.check-box .box {
+    -fx-background-color: -color-bg-input;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+/* El icono de check interno */
+.check-box:selected .box .mark {
+    -fx-background-color: #1EBFF2; /* Azul indicador */
+    -fx-shape: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"; /* Checkmark SVG limpio */
+}
+
+
+/* --- LABELS EN COLORES MUTED PARA FORMULARIOS --- */
+.form-label {
+    -fx-text-fill: -color-text-muted;
+    -fx-font-size: 13px;
+}
+.section-title {
+    -fx-text-fill: -color-text-main;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+.status-value {
+    -fx-text-fill: #1EBFF2; /* Resalta el estado actual con el azul */
+    -fx-font-weight: bold;
+}
