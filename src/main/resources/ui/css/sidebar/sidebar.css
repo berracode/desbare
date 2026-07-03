@@ -1,14 +1,43 @@
-.vbox, .hbox {
-    -fx-background-color: #2f3542;
+/* sidebar.css - Barra lateral en Escala de Grises */
+
+.vbox {
+    /* Fondo ligeramente diferente al fondo principal para dar profundidad */
+    -fx-background-color: -color-bg-panel;
 }
 
-.tool-button {
-    -fx-background-color: #57606f;
-    -fx-text-fill: white;
-}
-
-.tool-active {
-    -fx-background-color: #2563eb;
-    -fx-text-fill: white;
+.sidebar-title {
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
+    -fx-text-fill: -color-text-main;
+    -fx-padding: 0 0 0 4px;
+}
+
+/* Botones de la barra lateral (Ahora grises y sobrios) */
+.tool-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-text-muted;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-font-weight: 500;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 10px 14px;
+    -fx-background-radius: 4px;
+    -fx-border-radius: 4px;
+    -fx-cursor: hand;
+}
+
+/* Hover en escala de grises */
+.tool-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.05); /* Resalte sutil gris claro */
+    -fx-text-fill: -color-text-main;
+}
+
+/* Estado Activo / Seleccionado: Se mantiene sobrio usando variación de gris */
+.tool-button:focused, .tool-button.active {
+    -fx-background-color: -color-bg-input;            /* Fondo un poco más claro que el panel */
+    -fx-text-fill: -color-text-main;
+    -fx-border-color: transparent transparent transparent -color-text-muted; /* Marca lateral gris */
+    -fx-border-width: 0 0 0 3px;
+    -fx-border-radius: 0 4px 4px 0;
+    -fx-background-radius: 0 4px 4px 0;
 }

@@ -1,0 +1,84 @@
+/* global.css - Tema Oscuro en Escala de Grises y Acentuación Púrpura */
+
+.root {
+    /* --- PALETA EN ESCALA DE GRISES (FONDOS Y TEXTOS) --- */
+    -color-bg-main: #0d0d11;        /* Fondo base ultra oscuro (casi negro, tono carbono) */
+    -color-bg-panel: #16161a;       /* Gris oscuro para paneles internos, sidebar, etc. */
+    -color-bg-input: #1e1e24;       /* Gris intermedio para inputs y textareas */
+
+    -color-border-subtle: #2a2a32;  /* Gris claro para bordes finos y divisiones */
+    -color-border-focus: #3f3f4e;   /* Gris para cuando un elemento genérico tiene foco */
+
+    -color-text-main: #f3f3f5;      /* Blanco roto/Gris muy claro para máxima legibilidad */
+    -color-text-muted: #8e8e99;     /* Gris medio para textos secundarios o deshabilitados */
+
+    /* --- PALETA DE ACENTO (SOLO PARA BOTONES PRIMARIOS Y SELECCIÓN) --- */
+    -color-purple-primary: #6616B3; /* El morado base para acciones principales */
+    -color-purple-hover: #7b22d3;   /* Morado un poco más claro al pasar el mouse */
+    -color-purple-light: #954CE4;   /* Morado brillante para bordes de foco primarios */
+
+    /* Forzamos el fondo oscuro general */
+    -fx-background-color: -color-bg-main;
+}
+
+/* --- ESTILIZACIÓN DEL SPLIT PANE (ESTRUCTURA) --- */
+.split-pane {
+    -fx-background-color: -color-bg-main;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+/* Las barras divisorias ahora son sutiles líneas grises */
+.split-pane:horizontal > .split-pane-divider,
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: -color-border-subtle;
+    -fx-background-insets: 0;
+    -fx-padding: 0 1px 0 1px; /* Línea divisoria muy fina */
+}
+.split-pane-divider:hover {
+    -fx-background-color: -color-border-focus; /* Iluminación sutil al pasar el mouse */
+}
+
+/* --- COMPONENTES GENÉRICOS --- */
+.label {
+    -fx-text-fill: -color-text-main;
+    -fx-font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+}
+
+.separator .line {
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px 0 0 0;
+}
+
+/* Inputs de texto estilo terminal/grises */
+.text-input {
+    -fx-background-color: -color-bg-input;
+    -fx-text-fill: -color-text-main;
+    -fx-border-color: -color-border-subtle;
+    -fx-border-width: 1px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-prompt-text-fill: -color-text-muted;
+}
+.text-input:focused {
+    -fx-border-color: -color-border-focus;
+}
+
+/* --- BOTÓN PRIMARIO (El único que llevará tu morado) --- */
+/* Cuando en tus vistas de GPG/Base64 uses un botón de acción, ponle la clase .btn-primary */
+.btn-primary {
+    -fx-background-color: -color-purple-primary;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8px 16px;
+    -fx-background-radius: 4px;
+    -fx-cursor: hand;
+}
+.btn-primary:hover {
+    -fx-background-color: -color-purple-hover;
+}
+.btn-primary:focused {
+    -fx-border-color: -color-purple-light;
+    -fx-border-width: 1px;
+}

@@ -38,12 +38,12 @@ public class SidebarController {
 
         log.info("Actualizando botón activo: {}", toolTab.getName());
 
-        btnGpg.getStyleClass().remove("tool-active");
-        btnBase64.getStyleClass().remove("tool-active");
+        btnGpg.getStyleClass().remove("active");
+        btnBase64.getStyleClass().remove("active");
 
         switch (toolTab.getName()) {
-            case "GPG" -> btnGpg.getStyleClass().add("tool-active");
-            case "BASE64" -> btnBase64.getStyleClass().add("tool-active");
+            case "GPG" -> btnGpg.getStyleClass().add("active");
+            case "BASE64" -> btnBase64.getStyleClass().add("active");
         }
 
         log.info("GPG classes: {}", btnGpg.getStyleClass());
