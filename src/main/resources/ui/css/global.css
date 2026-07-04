@@ -430,3 +430,26 @@
 .table-view .corner {
     -fx-background-color: transparent;
 }
+
+/* SCROLL STILOS*/
+
+/* --- SCROLL PANE GLOBAL (Estilo Industrial Oscuro) --- */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+.scroll-pane > .viewport {
+    -fx-background-color: transparent; /* Evita el parche blanco interno */
+}
+
+/* Estilizar la barra de scroll para que combine con el tema */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-padding: 0 2px;
+}
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: -color-border-subtle; /* Tu gris sutil */
+    -fx-background-radius: 4px;
+}
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: -color-border-focus; /* Ilumina al pasar el mouse */
+}

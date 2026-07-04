@@ -3,72 +3,75 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/23.0.1"
+            fitToWidth="true"
+            hbarPolicy="NEVER"
+            vbarPolicy="AS_NEEDED"
+            styleClass="edge-to-edge"
+            stylesheets="@../../../css/global.css"
+            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.CreateKeyController">
 
-<VBox xmlns:fx="http://javafx.com/fxml/1"
-      xmlns="http://javafx.com/javafx/23.0.1"
-      spacing="16"
-      stylesheets="@../../../css/global.css"
+    <VBox spacing="16" styleClass="tab-content-area">
+        <padding>
+            <Insets top="20" right="24" bottom="24" left="24"/>
+        </padding>
 
-      fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.CreateKeyController">
+        <Label text="Generar Llave Pública" styleClass="sidebar-title"/>
 
-    <padding>
-        <Insets top="20" right="24" bottom="24" left="24"/>
-    </padding>
+        <GridPane hgap="12" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints minWidth="90" prefWidth="100"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
 
-    <Label text="Generar Llave Pública" styleClass="sidebar-title"/>
+            <Label text="Nombre:" styleClass="form-label" GridPane.rowIndex="0"/>
+            <TextField fx:id="txtName" promptText="Juan Hernandez" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
 
-    <GridPane hgap="12" vgap="12">
-        <columnConstraints>
-            <ColumnConstraints minWidth="90" prefWidth="100" />
-            <ColumnConstraints hgrow="ALWAYS" />
-        </columnConstraints>
+            <Label text="Email:" styleClass="form-label" GridPane.rowIndex="1"/>
+            <TextField fx:id="txtEmail" promptText="usuario@correo.com" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-        <Label text="Nombre:" styleClass="form-label" GridPane.rowIndex="0"/>
-        <TextField fx:id="txtName" promptText="Juan Hernandez" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+            <Label text="Passphrase:" styleClass="form-label" GridPane.rowIndex="2"/>
+            <PasswordField fx:id="txtPassphrase" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        </GridPane>
 
-        <Label text="Email:" styleClass="form-label" GridPane.rowIndex="1"/>
-        <TextField fx:id="txtEmail" promptText="usuario@correo.com" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Separator/>
 
-        <Label text="Passphrase:" styleClass="form-label" GridPane.rowIndex="2"/>
-        <PasswordField fx:id="txtPassphrase" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-    </GridPane>
+        <Label text="Tipo de llave" styleClass="section-title"/>
 
-    <Separator/>
+        <VBox spacing="8">
+            <RadioButton fx:id="rbRsaRsa" selected="true" text="RSA and RSA (default)"/>
+            <RadioButton fx:id="rbDsaElgamal" disable="true" text="DSA and Elgamal"/>
+            <RadioButton fx:id="rbDsaSignOnly" disable="true" text="DSA (sign only)"/>
+            <RadioButton fx:id="rbRsaSignOnly" disable="true" text="RSA (sign only)"/>
+            <RadioButton fx:id="rbExistingKey" disable="true" text="Existing key from card"/>
+        </VBox>
 
-    <Label text="Tipo de llave" styleClass="section-title"/>
+        <GridPane hgap="12" vgap="12">
+            <Label text="RSA Size:" styleClass="form-label" GridPane.rowIndex="0"/>
+            <ComboBox fx:id="cbKeySize" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        </GridPane>
 
-    <VBox spacing="8">
-        <RadioButton fx:id="rbRsaRsa" selected="true" text="RSA and RSA (default)"/>
-        <RadioButton fx:id="rbDsaElgamal" disable="true" text="DSA and Elgamal"/>
-        <RadioButton fx:id="rbDsaSignOnly" disable="true" text="DSA (sign only)"/>
-        <RadioButton fx:id="rbRsaSignOnly" disable="true" text="RSA (sign only)"/>
-        <RadioButton fx:id="rbExistingKey" disable="true" text="Existing key from card"/>
+        <Separator/>
+
+        <Label text="Expiración" styleClass="section-title"/>
+
+        <HBox spacing="10">
+            <CheckBox fx:id="chkNeverExpire" selected="true" text="No expira"/>
+        </HBox>
+
+        <HBox spacing="10">
+            <ComboBox fx:id="cbExpireAmount" prefWidth="80"/>
+            <ComboBox fx:id="cbExpireUnit" prefWidth="120"/>
+        </HBox>
+
+        <GridPane hgap="12" vgap="12">
+            <Label text="Estado:" styleClass="form-label" GridPane.rowIndex="0"/>
+            <Label fx:id="lblStatus" text="None" styleClass="status-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        </GridPane>
+
+        <Region VBox.vgrow="ALWAYS" minHeight="10"/>
+
+        <Button onAction="#handleGenerateKey" text="Generar Llave" styleClass="btn-primary" maxWidth="200"/>
     </VBox>
-
-    <GridPane hgap="12" vgap="12">
-        <Label text="RSA Size:" styleClass="form-label" GridPane.rowIndex="0"/>
-        <ComboBox fx:id="cbKeySize" prefWidth="180" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-    </GridPane>
-
-    <Separator/>
-
-    <Label text="Expiración" styleClass="section-title"/>
-
-    <HBox spacing="10">
-        <CheckBox fx:id="chkNeverExpire" selected="true" text="No expira"/>
-    </HBox>
-
-    <HBox spacing="10">
-        <ComboBox fx:id="cbExpireAmount" prefWidth="80"/>
-        <ComboBox fx:id="cbExpireUnit" prefWidth="120"/>
-    </HBox>
-
-    <GridPane hgap="12" vgap="12">
-        <Label text="Estado:" styleClass="form-label" GridPane.rowIndex="0"/>
-        <Label fx:id="lblStatus" text="None" styleClass="status-value" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
-    </GridPane>
-
-    <Region VBox.vgrow="ALWAYS" minHeight="10"/>
-
-    <Button onAction="#handleGenerateKey" text="Generar Llave" styleClass="btn-primary" maxWidth="200"/>
-</VBox>
+</ScrollPane>
