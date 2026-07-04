@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.sql.DataSource;
@@ -54,7 +55,42 @@ public class SqliteGpgKeyRepositoryAdapter implements GpgKeyRepositoryPort {
 
     @Override
     public List<GpgKey> findAll() {
-        return List.of();
+        String sql = """
+                SELECT 
+                    id, 
+                    name, 
+                    email, 
+                    fingerprint, 
+                    public_key, 
+                    private_key, 
+                    created_at 
+                FROM gpg_keys
+                ORDER BY created_at DESC
+                """;
+
+        List<GpgKey> keys = new ArrayList<>();
+
+        try (
+                Connection con = dataSource.getConnection();
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
+            while (rs.next()) {
+                GpgKey key = new GpgKey(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("public_key"),
+                        rs.getString("private_key"),
+                        rs.getString("fingerprint"),
+                        rs.getString("created_at") // Mapea la fecha guardada por SQLite
+                );
+                keys.add(key);
+            }
+            return keys;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al listar las llaves GPG desde SQLite", e);
+        }
     }
 
     @Override

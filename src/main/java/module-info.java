@@ -12,6 +12,9 @@ module co.com.bancolombia.desbare {
     opens co.com.bancolombia.desbare to javafx.fxml;
     exports co.com.bancolombia.desbare;
 
+    //view models
+    exports co.com.bancolombia.desbare.ui.viewmodel.gpg.dto;
+
     // Controladores
     exports co.com.bancolombia.desbare.ui.controller; // opcional si otros módulos lo usan
     opens co.com.bancolombia.desbare.ui.controller to javafx.fxml;
@@ -27,8 +30,6 @@ module co.com.bancolombia.desbare {
 
     exports co.com.bancolombia.desbare.ui.controller.commands.base64;
     opens co.com.bancolombia.desbare.ui.controller.commands.base64 to javafx.fxml;
-
-
 
 
 }

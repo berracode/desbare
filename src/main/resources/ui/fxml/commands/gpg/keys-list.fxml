@@ -12,25 +12,26 @@
       xmlns="http://javafx.com/javafx/23.0.1"
       spacing="14"
       styleClass="tab-content-area"
-     >
+      fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.ListKeysController">
+
     <padding>
-    <Insets top="20" right="24" bottom="24" left="24"/>
-</padding>
+        <Insets top="20" right="24" bottom="24" left="24"/>
+    </padding>
 
     <Label text="Llaves GPG" styleClass="sidebar-title"/>
 
     <HBox spacing="10">
-        <Button text="Refrescar" styleClass="btn-secondary"/>
-        <Button text="Exportar" styleClass="btn-secondary"/>
-        <Button text="Eliminar" styleClass="btn-secondary"/>
+        <Button text="Refrescar" styleClass="btn-secondary" onAction="#handleRefresh"/>
+        <Button text="Exportar" styleClass="btn-secondary" onAction="#handleExport"/>
+        <Button text="Eliminar" styleClass="btn-secondary" onAction="#handleByDelete"/>
     </HBox>
 
-    <TableView VBox.vgrow="ALWAYS">
+    <TableView fx:id="tblKeys" VBox.vgrow="ALWAYS">
         <columns>
-            <TableColumn text="Id" prefWidth="180"/>
-            <TableColumn text="Nombre" prefWidth="220"/>
-            <TableColumn text="Email" prefWidth="250"/>
-            <TableColumn text="Creación" prefWidth="180"/>
+            <TableColumn fx:id="colId" text="Id / Fingerprint" prefWidth="180"/>
+            <TableColumn fx:id="colName" text="Nombre" prefWidth="220"/>
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="250"/>
+            <TableColumn fx:id="colCreatedAt" text="Creación" prefWidth="180"/>
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

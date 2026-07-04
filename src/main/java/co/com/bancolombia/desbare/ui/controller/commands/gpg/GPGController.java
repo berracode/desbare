@@ -4,6 +4,9 @@ import java.io.IOException;
 
 import co.com.bancolombia.desbare.bootstrap.AppBootstrap;
 
+import co.com.bancolombia.desbare.core.domain.usecase.ListGpgKeysUseCase;
+import co.com.bancolombia.desbare.core.infrastructure.sqlite.SqliteGpgKeyRepositoryAdapter;
+import co.com.bancolombia.desbare.ui.viewmodel.gpg.ListKeysViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -71,6 +74,9 @@ public class GPGController {
                     return new EncryptController(bootstrap.encryptViewModel());
                 } else if (type == DecryptController.class) {
                     return new DecryptController(bootstrap.decryptViewModel());
+                }
+                else if (type == ListKeysController.class) {
+                    return new ListKeysController(bootstrap.listKeysViewModel());
                 }
 
                 try {
