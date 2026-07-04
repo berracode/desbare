@@ -25,5 +25,10 @@ module co.com.bancolombia.desbare {
     exports co.com.bancolombia.desbare.ui.controller.commands.gpg;
     opens co.com.bancolombia.desbare.ui.controller.commands.gpg to javafx.fxml;
 
+    exports co.com.bancolombia.desbare.ui.controller.commands.base64;
+    opens co.com.bancolombia.desbare.ui.controller.commands.base64 to javafx.fxml;
+
+
+
 
 }

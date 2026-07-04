@@ -15,6 +15,7 @@ import co.com.bancolombia.desbare.core.infrastructure.gpg.BouncyCastleGpgGenerat
 import co.com.bancolombia.desbare.core.infrastructure.sqlite.SqliteGpgKeyRepositoryAdapter;
 import co.com.bancolombia.desbare.core.infrastructure.sqlite.config.SqliteDataSourceFactory;
 import co.com.bancolombia.desbare.core.infrastructure.sqlite.config.SqliteDatabaseInitializer;
+import co.com.bancolombia.desbare.ui.viewmodel.base64.Base64ToolViewModel;
 import co.com.bancolombia.desbare.ui.viewmodel.gpg.CreateKeyViewModel;
 import co.com.bancolombia.desbare.ui.viewmodel.gpg.DecryptViewModel;
 import co.com.bancolombia.desbare.ui.viewmodel.gpg.EncryptViewModel;
@@ -39,6 +40,7 @@ public class AppBootstrap {
     private final CreateKeyViewModel createKeyViewModel;
     private final EncryptViewModel encryptViewModel;
     private final DecryptViewModel decryptViewModel;
+    private final Base64ToolViewModel base64ToolViewModel;
 
     private AppBootstrap() {
 
@@ -60,6 +62,7 @@ public class AppBootstrap {
         createKeyViewModel = new CreateKeyViewModel(generateKeyUseCase);
         encryptViewModel = new EncryptViewModel(encryptUseCase);
         decryptViewModel = new DecryptViewModel(decryptUseCase);
+        base64ToolViewModel = new Base64ToolViewModel();
 
     }
 
@@ -77,5 +80,9 @@ public class AppBootstrap {
 
     public DecryptViewModel decryptViewModel() {
         return decryptViewModel;
+    }
+
+    public Base64ToolViewModel base64ToolViewModel(){
+        return base64ToolViewModel;
     }
 }
