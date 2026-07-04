@@ -7,7 +7,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.base64.Base64Controller"
+            fx:controller="com.ritallus.desvare.ui.controller.commands.base64.Base64Controller"
             stylesheets="@../../../css/global.css"
             prefHeight="720.0" prefWidth="1000.0">
 

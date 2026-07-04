@@ -9,7 +9,7 @@
            orientation="VERTICAL"
            xmlns="http://javafx.com/javafx/23.0.1"
            stylesheets="@../css/global.css"
-           fx:controller="co.com.bancolombia.desbare.ui.controller.MainController">
+           fx:controller="com.ritallus.desvare.ui.controller.MainController">
 
     <!-- Split horizontal principal -->
     <SplitPane dividerPositions="0.2"

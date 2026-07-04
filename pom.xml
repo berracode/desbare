@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>co.com.bancolombia</groupId>
+    <groupId>com.ritallus</groupId>
     <artifactId>desvar-app</artifactId>
     <version>1.0.0</version>
     <name>desvar-app</name>
@@ -116,7 +116,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>co.com.bancolombia.desbare/co.com.bancolombia.desbare.JavaFxApplication</mainClass>
+                    <mainClass>com.ritallus.desvare/com.ritallus.desvare.JavaFxApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -173,7 +173,7 @@
                                 <argument>--main-jar</argument>
                                 <argument>${project.build.finalName}.jar</argument>
                                 <argument>--main-class</argument>
-                                <argument>co.com.bancolombia.desbare.MainApplication</argument>
+                                <argument>com.ritallus.desvare.MainApplication</argument>
 
                                 <argument>--dest</argument>
                                 <argument>${project.build.directory}/dist</argument>

@@ -10,7 +10,7 @@
       xmlns="http://javafx.com/javafx/23.0.1"
       spacing="14"
       styleClass="tab-content-area"
-      fx:controller="co.com.bancolombia.desbare.ui.controller.commands.base64.EncodeController">
+      fx:controller="com.ritallus.desvare.ui.controller.commands.base64.EncodeController">
 
     <padding>
         <Insets top="20" right="24" bottom="24" left="24"/>

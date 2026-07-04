@@ -7,7 +7,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.GPGController"
+            fx:controller="com.ritallus.desvare.ui.controller.commands.gpg.GPGController"
             stylesheets="@../../../css/global.css"
             prefHeight="720.0" prefWidth="1000.0">
 
@@ -20,7 +20,7 @@
                  tabClosingPolicy="UNAVAILABLE"
                  VBox.vgrow="ALWAYS">
 
-            <Tab text="Generar llave publica" />
+            <Tab text="Generar llave publica"/>
             <Tab text="Cifrar"/>
             <Tab text="Descifrar"/>
             <Tab text="Listar llaves"/>

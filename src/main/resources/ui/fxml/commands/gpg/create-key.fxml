@@ -10,7 +10,7 @@
             vbarPolicy="AS_NEEDED"
             styleClass="edge-to-edge"
             stylesheets="@../../../css/global.css"
-            fx:controller="co.com.bancolombia.desbare.ui.controller.commands.gpg.CreateKeyController">
+            fx:controller="com.ritallus.desvare.ui.controller.commands.gpg.CreateKeyController">
 
     <VBox spacing="16" styleClass="tab-content-area">
         <padding>
