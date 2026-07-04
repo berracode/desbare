@@ -1,0 +1,49 @@
+name: Build and Release Desktop Portable
+
+on:
+  push:
+    tags:
+      - 'v*.*.*' # Se dispara automáticamente al hacer push de un tag (ej: v1.0.0)
+
+jobs:
+  release:
+    name: Create Portable Release
+    runs-on: windows-latest # Requerido para que jpackage use las herramientas de Windows nativas
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build and Package with Maven
+        run: mvn clean package -DskipTests
+
+      - name: Compress App Image to Zip
+        shell: powershell
+        run: |
+          # Extraemos la versión del POM dinámicamente para nombrar el ZIP
+          $version = [xml](Get-Content pom.xml).project.version
+          $zipName = "desbare-ui-$version-win-portable.zip"
+          
+          Write-Host "Comprimiendo la distribución portable para la versión $version..."
+          
+          # jpackage genera el output en target/dist/Desbare
+          Compress-Archive -Path "target/dist/Desbare" -DestinationPath "target/$zipName"
+          
+          Write-Host "Archivo ZIP creado con éxito en target/$zipName"
+
+      - name: Create GitHub Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: target/*.zip
+          generate_release_notes: true # Genera los release notes usando tus mensajes de commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
