@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>co.com.bancolombia</groupId>
-    <artifactId>desbare</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>desbare</name>
+    <artifactId>desbare-ui</artifactId>
+    <version>1.0.0</version>
+    <name>desbare-ui</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -93,6 +93,7 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
