@@ -3,12 +3,12 @@ name: Build and Release Desktop Portable
 on:
   push:
     tags:
-      - 'v*.*.*' # Se dispara automáticamente al hacer push de un tag (ej: v1.0.0)
+      - 'v*.*.*'
 
 jobs:
   release:
     name: Create Portable Release
-    runs-on: windows-latest # Requerido para que jpackage use las herramientas de Windows nativas
+    runs-on: windows-latest
     permissions:
       contents: write
 
@@ -29,21 +29,45 @@ jobs:
       - name: Compress App Image to Zip
         shell: powershell
         run: |
-          # Extraemos la versión del POM dinámicamente para nombrar el ZIP
-          $version = [xml](Get-Content pom.xml).project.version
-          $zipName = "desbare-ui-$version-win-portable.zip"
+          # 1. Leer el archivo pom.xml completo
+          $pomContent = Get-Content pom.xml -Raw
           
-          Write-Host "Comprimiendo la distribución portable para la versión $version..."
+          # 2. Extraer la versión de la cabecera usando Regex
+          if ($pomContent -match '<version>\s*([^<]+?)\s*</version>') {
+              $version = $Matches[1].Trim()
+          } else {
+              $version = "ERR.0.0"
+          }
           
-          # jpackage genera el output en target/dist/Desbare
-          Compress-Archive -Path "target/dist/Desbare" -DestinationPath "target/$zipName"
+          # 3. Extraer el artifactId para nombrar el archivo exactamente igual a Maven
+          if ($pomContent -match '<artifactId>\s*([^<]+?)\s*</artifactId>') {
+              $artifactId = $Matches[1].Trim()
+          } else {
+              $artifactId = "desvar-app"
+          }
           
-          Write-Host "Archivo ZIP creado con éxito en target/$zipName"
+          # Nombre esperado del archivo: desvar-app-1.0.0-win-portable.zip
+          $zipName = "$artifactId-$version-win-portable.zip"
+          
+          Write-Host "[INFO] ArtifactId detectado: $artifactId"
+          Write-Host "[INFO] Versión detectada: $version"
+          
+          # 4. jpackage ahora genera la carpeta 'DesvarApp' según tu propiedad --name
+          $appImagePath = "target/dist/DesvarApp"
+          
+          if (Test-Path $appImagePath) {
+              Write-Host "[INFO] Comprimiendo distribución portable desde $appImagePath hacia target/$zipName..."
+              Compress-Archive -Path $appImagePath -DestinationPath "target/$zipName" -Force
+              Write-Host "[SUCCESS] ¡Archivo ZIP creado con éxito!"
+          } else {
+              Write-Error "[ERROR] No se encontró la carpeta generada por jpackage en: $appImagePath"
+              exit 1
+          }
 
       - name: Create GitHub Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
           files: target/*.zip
-          generate_release_notes: true # Genera los release notes usando tus mensajes de commit
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

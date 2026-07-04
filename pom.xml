@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>co.com.bancolombia</groupId>
-    <artifactId>desbare-ui</artifactId>
+    <artifactId>desvar-app</artifactId>
     <version>1.0.0</version>
-    <name>desbare-ui</name>
+    <name>desvar-app</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -164,7 +164,7 @@
                                 <argument>app-image</argument>
 
                                 <argument>--name</argument>
-                                <argument>Desbare</argument>
+                                <argument>DesvarApp</argument>
                                 <argument>--vendor</argument>
                                 <argument>Vendor</argument>
 
