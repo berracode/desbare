@@ -9,6 +9,8 @@ import lombok.Setter;
 @Builder
 public class GpgKeyDto {
     private String fingerprint;
+    private String publicKey;       // Llave original completa (para copiar)
+    private String publicKeyBase64; // Primeros 20 caracteres del Base64 (para mostrar)
     private String name;
     private String email;
     private String createdAt;

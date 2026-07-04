@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/23.0.1"
       spacing="14"
@@ -22,6 +21,7 @@
 
     <HBox spacing="10">
         <Button text="Refrescar" styleClass="btn-secondary" onAction="#handleRefresh"/>
+        <Button text="Copiar Llave" styleClass="btn-secondary" onAction="#handleCopyPublicKey"/>
         <Button text="Exportar" styleClass="btn-secondary" onAction="#handleExport"/>
         <Button text="Eliminar" styleClass="btn-secondary" onAction="#handleByDelete"/>
     </HBox>
@@ -29,9 +29,10 @@
     <TableView fx:id="tblKeys" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn fx:id="colId" text="Id / Fingerprint" prefWidth="180"/>
-            <TableColumn fx:id="colName" text="Nombre" prefWidth="220"/>
-            <TableColumn fx:id="colEmail" text="Email" prefWidth="250"/>
-            <TableColumn fx:id="colCreatedAt" text="Creación" prefWidth="180"/>
+            <TableColumn fx:id="colPublicKey" text="Llave pública (Base64)" prefWidth="220"/>
+            <TableColumn fx:id="colName" text="Nombre" prefWidth="150"/>
+            <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+            <TableColumn fx:id="colCreatedAt" text="Creación" prefWidth="150"/>
         </columns>
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>

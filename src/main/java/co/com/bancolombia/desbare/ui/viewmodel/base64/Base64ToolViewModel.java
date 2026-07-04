@@ -1,13 +1,17 @@
 package co.com.bancolombia.desbare.ui.viewmodel.base64;
 
+import co.com.bancolombia.desbare.core.domain.ports.outbound.Base64ServicePort;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor
 public class Base64ToolViewModel {
+
+    private final Base64ServicePort base64Service; // Inyectado desde el dominio
+
 
     // --- PROPIEDADES REACTIVAS PARA ENCODE ---
     private final StringProperty encodeInput = new SimpleStringProperty("");
@@ -18,11 +22,23 @@ public class Base64ToolViewModel {
     private final StringProperty decodeOutput = new SimpleStringProperty("");
 
     // Getters de las propiedades para hacer el Binding en los Controladores: el bidireccional
-    public StringProperty encodeInputProperty() { return encodeInput; }
-    public StringProperty encodeOutputProperty() { return encodeOutput; }
-    public StringProperty decodeInputProperty() { return decodeInput; }
-    public StringProperty decodeOutputProperty() { return decodeOutput; }
+    public StringProperty encodeInputProperty() {
+        return encodeInput;
+    }
+
+    public StringProperty encodeOutputProperty() {
+        return encodeOutput;
+    }
+
+    public StringProperty decodeInputProperty() {
+        return decodeInput;
+    }
+
+    public StringProperty decodeOutputProperty() {
+        return decodeOutput;
+    }
     //esto puede estar en un servicio en la capa core
+
     /**
      * Lógica: Codificar texto plano a Base64
      */
@@ -34,7 +50,7 @@ public class Base64ToolViewModel {
         }
         try {
             log.info("Codificando bloque de texto a Base64. Tamaño: {}", inputText.length());
-            String encoded = Base64.getEncoder().encodeToString(inputText.getBytes(StandardCharsets.UTF_8));
+            String encoded = base64Service.encode(inputText);
             encodeOutput.set(encoded);
         } catch (Exception e) {
             log.error("Error inesperado al codificar Base64", e);
@@ -53,10 +69,7 @@ public class Base64ToolViewModel {
         }
         try {
             log.info("Decodificando cadena Base64...");
-            // Limpiamos posibles espacios en blanco o saltos de línea comunes al pegar datos
-            String cleanInput = inputText.trim().replaceAll("\\s", "");
-            byte[] decodedBytes = Base64.getDecoder().decode(cleanInput);
-            String decoded = new String(decodedBytes, StandardCharsets.UTF_8);
+            var decoded = base64Service.decode(inputText);
             decodeOutput.set(decoded);
         } catch (IllegalArgumentException e) {
             log.warn("La cadena proporcionada no es un Base64 válido: {}", e.getMessage());

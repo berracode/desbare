@@ -2,10 +2,12 @@ package co.com.bancolombia.desbare.bootstrap;
 
 import javax.sql.DataSource;
 
+import co.com.bancolombia.desbare.core.domain.ports.outbound.Base64ServicePort;
 import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgDecryptionPort;
 import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgEncryptionPort;
 import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgGeneratorPort;
 import co.com.bancolombia.desbare.core.domain.ports.outbound.GpgKeyRepositoryPort;
+import co.com.bancolombia.desbare.core.domain.service.Base64Service;
 import co.com.bancolombia.desbare.core.domain.usecase.DecryptUseCase;
 import co.com.bancolombia.desbare.core.domain.usecase.EncryptUseCase;
 import co.com.bancolombia.desbare.core.domain.usecase.GenerateKeyUseCase;
@@ -34,6 +36,7 @@ public class AppBootstrap {
     private final GpgDecryptionPort decryptionPort;
 
     private final GpgKeyRepositoryPort repository;
+    private final Base64ServicePort base64ServicePort;
 
     private final GenerateKeyUseCase generateKeyUseCase;
     private final EncryptUseCase encryptUseCase;
@@ -55,6 +58,7 @@ public class AppBootstrap {
         new SqliteDatabaseInitializer(dataSource).initialize();
 
         repository = new SqliteGpgKeyRepositoryAdapter(dataSource);
+        base64ServicePort = new Base64Service();
 
         generatorPort = new BouncyCastleGpgGeneratorAdapter();
         encryptionPort = new BouncyCastleEncryptionAdapter();
@@ -68,8 +72,8 @@ public class AppBootstrap {
         createKeyViewModel = new CreateKeyViewModel(generateKeyUseCase);
         encryptViewModel = new EncryptViewModel(encryptUseCase);
         decryptViewModel = new DecryptViewModel(decryptUseCase);
-        listKeysViewModel = new ListKeysViewModel(listGpgKeysUseCase);
-        base64ToolViewModel = new Base64ToolViewModel();
+        listKeysViewModel = new ListKeysViewModel(listGpgKeysUseCase, base64ServicePort);
+        base64ToolViewModel = new Base64ToolViewModel(base64ServicePort);
 
     }
 
@@ -89,11 +93,11 @@ public class AppBootstrap {
         return decryptViewModel;
     }
 
-    public Base64ToolViewModel base64ToolViewModel(){
+    public Base64ToolViewModel base64ToolViewModel() {
         return base64ToolViewModel;
     }
 
-    public ListKeysViewModel listKeysViewModel(){
+    public ListKeysViewModel listKeysViewModel() {
         return listKeysViewModel;
     }
 }
