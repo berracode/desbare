@@ -44,7 +44,7 @@ public class ListKeysViewModel {
                     return GpgKeyDto.builder()
                             .fingerprint(g.fingerprint())
                             .publicKey(g.publicKey())
-                            .publicKeyBase64(shortBase64)
+                            .publicKeyBase64(fullBase64)
                             .name(g.name())
                             .email(g.email())
                             .createdAt(g.createdAt())
