@@ -163,6 +163,9 @@
                                 <argument>--type</argument>
                                 <argument>app-image</argument>
 
+                                <argument>--icon</argument>
+                                <argument>${project.basedir}/src/main/resources/appicons/DesvarApp.ico</argument>
+
                                 <argument>--name</argument>
                                 <argument>DesvarApp</argument>
                                 <argument>--vendor</argument>
