@@ -1,5 +1,7 @@
 package com.ritallus.desvare.ui.controller.commands.base64;
 
+import java.io.IOException;
+
 import com.ritallus.desvare.bootstrap.AppBootstrap;
 import com.ritallus.desvare.ui.viewmodel.base64.Base64ToolViewModel;
 
@@ -9,8 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
 
 @Slf4j
 public class Base64Controller {
@@ -42,6 +42,7 @@ public class Base64Controller {
         switch (newTab.getText()) {
             case "Codificar" -> loadCommandView("encode.fxml", newTab.getText());
             case "Decodificar" -> loadCommandView("decode.fxml", newTab.getText());
+            default -> throw new RuntimeException("No existe vista para está Tab");
         }
     }
 

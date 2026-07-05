@@ -33,131 +33,63 @@ import org.bouncycastle.openpgp.operator.jcajce.JcaPGPKeyPair;
 import org.bouncycastle.openpgp.operator.jcajce.JcePBESecretKeyEncryptorBuilder;
 
 @Slf4j
-public class BouncyCastleGpgGeneratorAdapter
-        implements GpgGeneratorPort {
+public class BouncyCastleGpgGeneratorAdapter implements GpgGeneratorPort {
 
     static {
-        Security.addProvider(
-                new BouncyCastleProvider()
-        );
+        Security.addProvider(new BouncyCastleProvider());
     }
 
     @Override
-    public GeneratedKeyPair generate(
-            GenerateKeyRequest request
-    ) {
+    public GeneratedKeyPair generate(GenerateKeyRequest request) {
 
         if (request.keyType() != KeyType.RSA_RSA) {
-            throw new UnsupportedOperationException(
-                    "Only RSA/RSA keys are currently supported"
-            );
+            throw new UnsupportedOperationException("Only RSA/RSA keys are currently supported");
         }
 
         try {
-
             Date creationDate = new Date();
+            var identity = request.name() + " <" + request.email() + ">";
 
-            String identity =
-                    request.name()
-                            + " <"
-                            + request.email()
-                            + ">";
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA", "BC");
 
-            KeyPairGenerator kpg =
-                    KeyPairGenerator.getInstance(
-                            "RSA",
-                            "BC"
-                    );
+            kpg.initialize(request.keySize());
 
-            kpg.initialize(
-                    request.keySize()
-            );
 
-            //
-            // Primary key
-            //
-            KeyPair signingPair =
-                    kpg.generateKeyPair();
+            // Primary key: para fimar y certificar
+            KeyPair signingPair = kpg.generateKeyPair();
 
-            //
-            // Encryption subkey
-            //
-            KeyPair encryptionPair =
-                    kpg.generateKeyPair();
+            // Encryption subkey: para  encriptar
+            KeyPair encryptionPair = kpg.generateKeyPair();
 
-            PGPKeyPair masterKey =
-                    new JcaPGPKeyPair(
-                            PGPPublicKey.RSA_SIGN,
-                            signingPair,
-                            creationDate
-                    );
+            PGPKeyPair masterKey = new JcaPGPKeyPair(PGPPublicKey.RSA_SIGN, signingPair, creationDate);
 
-            PGPKeyPair subKey =
-                    new JcaPGPKeyPair(
-                            PGPPublicKey.RSA_ENCRYPT,
-                            encryptionPair,
-                            creationDate
-                    );
+            PGPKeyPair subKey = new JcaPGPKeyPair(PGPPublicKey.RSA_ENCRYPT, encryptionPair, creationDate);
 
-            PGPDigestCalculator sha1Calc =
-                    new JcaPGPDigestCalculatorProviderBuilder()
-                            .build()
-                            .get(HashAlgorithmTags.SHA1);
+            PGPDigestCalculator sha1Calc = new JcaPGPDigestCalculatorProviderBuilder()
+                    .build()
+                    .get(HashAlgorithmTags.SHA1);
 
             PBESecretKeyEncryptor secretKeyEncryptor =
-                    new JcePBESecretKeyEncryptorBuilder(
-                            PGPEncryptedData.AES_256,
-                            sha1Calc
-                    )
-                            .setProvider("BC")
-                            .build(
-                                    request.passphrase()
-                                            .toCharArray()
-                            );
+                    new JcePBESecretKeyEncryptorBuilder(PGPEncryptedData.AES_256, sha1Calc).setProvider("BC")
+                            .build(request.passphrase().toCharArray());
 
-            //
             // Primary key flags
-            //
-            PGPSignatureSubpacketGenerator masterSubpackets =
-                    new PGPSignatureSubpacketGenerator();
+            PGPSignatureSubpacketGenerator masterSubpackets = new PGPSignatureSubpacketGenerator();
 
-            masterSubpackets.setKeyFlags(
-                    false,
-                    KeyFlags.CERTIFY_OTHER
-                            | KeyFlags.SIGN_DATA
-            );
+            masterSubpackets.setKeyFlags(false, KeyFlags.CERTIFY_OTHER | KeyFlags.SIGN_DATA);
 
-            long expiration =
-                    expirationSeconds(request);
+            long expiration = expirationSeconds(request);
 
             if (expiration > 0) {
-
-                masterSubpackets
-                        .setKeyExpirationTime(
-                                false,
-                                expiration
-                        );
+                masterSubpackets.setKeyExpirationTime(false, expiration);
             }
 
-            //
             // Encryption subkey flags
-            //
-            PGPSignatureSubpacketGenerator encryptionSubpackets =
-                    new PGPSignatureSubpacketGenerator();
-
-            encryptionSubpackets.setKeyFlags(
-                    false,
-                    KeyFlags.ENCRYPT_COMMS
-                            | KeyFlags.ENCRYPT_STORAGE
-            );
+            PGPSignatureSubpacketGenerator encryptionSubpackets = new PGPSignatureSubpacketGenerator();
+            encryptionSubpackets.setKeyFlags(false, KeyFlags.ENCRYPT_COMMS | KeyFlags.ENCRYPT_STORAGE);
 
             if (expiration > 0) {
-
-                encryptionSubpackets
-                        .setKeyExpirationTime(
-                                false,
-                                expiration
-                        );
+                encryptionSubpackets.setKeyExpirationTime(false, expiration);
             }
 
             PGPKeyRingGenerator keyRingGenerator =
@@ -169,146 +101,71 @@ public class BouncyCastleGpgGeneratorAdapter
                             masterSubpackets.generate(),
                             null,
                             new JcaPGPContentSignerBuilder(
-                                    masterKey
-                                            .getPublicKey()
-                                            .getAlgorithm(),
+                                    masterKey.getPublicKey().getAlgorithm(),
                                     HashAlgorithmTags.SHA256
                             ),
                             secretKeyEncryptor
                     );
 
-            keyRingGenerator.addSubKey(
-                    subKey,
-                    encryptionSubpackets.generate(),
-                    null
-            );
+            keyRingGenerator.addSubKey(subKey, encryptionSubpackets.generate(), null);
 
-            PGPSecretKeyRing secretKeyRing =
-                    keyRingGenerator.generateSecretKeyRing();
+            PGPSecretKeyRing secretKeyRing = keyRingGenerator.generateSecretKeyRing();
+            PGPPublicKeyRing publicKeyRing = keyRingGenerator.generatePublicKeyRing();
 
-            PGPPublicKeyRing publicKeyRing =
-                    keyRingGenerator.generatePublicKeyRing();
+            String publicKey = exportPublicKey(publicKeyRing);
 
-            String publicKey =
-                    exportPublicKey(publicKeyRing);
+            String privateKey = exportPrivateKey(secretKeyRing);
 
-            String privateKey =
-                    exportPrivateKey(secretKeyRing);
+            String fingerprint = bytesToHex(masterKey.getPublicKey().getFingerprint());
 
-            String fingerprint =
-                    bytesToHex(
-                            masterKey.getPublicKey()
-                                    .getFingerprint()
-                    );
-
-            return new GeneratedKeyPair(
-                    publicKey,
-                    privateKey,
-                    fingerprint
-            );
+            return new GeneratedKeyPair(publicKey, privateKey, fingerprint);
 
         } catch (Exception e) {
-
-            throw new RuntimeException(
-                    "Error generando llave OpenPGP",
-                    e
-            );
+            throw new RuntimeException("Error generando llave OpenPGP", e);
         }
     }
 
-    private String exportPublicKey(
-            PGPPublicKeyRing keyRing
-    ) throws Exception {
+    private String exportPublicKey(PGPPublicKeyRing keyRing) throws Exception {
 
-        ByteArrayOutputStream baos =
-                new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (
-                ArmoredOutputStream armor =
-                        new ArmoredOutputStream(
-                                baos
-                        )
-        ) {
-
+        try (ArmoredOutputStream armor = new ArmoredOutputStream(baos)) {
             keyRing.encode(armor);
         }
 
-        return baos.toString(
-                StandardCharsets.UTF_8
-        );
+        return baos.toString(StandardCharsets.UTF_8);
     }
 
-    private String exportPrivateKey(
-            PGPSecretKeyRing keyRing
-    ) throws Exception {
+    private String exportPrivateKey(PGPSecretKeyRing keyRing) throws Exception {
 
-        ByteArrayOutputStream baos =
-                new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        try (
-                ArmoredOutputStream armor =
-                        new ArmoredOutputStream(
-                                baos
-                        )
-        ) {
-
+        try (ArmoredOutputStream armor = new ArmoredOutputStream(baos)) {
             keyRing.encode(armor);
         }
 
-        return baos.toString(
-                StandardCharsets.UTF_8
-        );
+        return baos.toString(StandardCharsets.UTF_8);
     }
 
-    private long expirationSeconds(
-            GenerateKeyRequest request
-    ) {
+    private long expirationSeconds(GenerateKeyRequest request) {
 
         if (request.neverExpire()) {
             return 0;
         }
-
-        return switch (
-                request.expirationUnit()
-                ) {
-
-            case WEEKS -> request.expirationAmount()
-                    * 7L
-                    * 24
-                    * 60
-                    * 60;
-
-            case MONTHS -> request.expirationAmount()
-                    * 30L
-                    * 24
-                    * 60
-                    * 60;
-
-            case YEARS -> request.expirationAmount()
-                    * 365L
-                    * 24
-                    * 60
-                    * 60;
+        return switch (request.expirationUnit()) {
+            case WEEKS -> request.expirationAmount() * 7L * 24 * 60 * 60;
+            case MONTHS -> request.expirationAmount() * 30L * 24 * 60 * 60;
+            case YEARS -> request.expirationAmount() * 365L * 24 * 60 * 60;
         };
     }
 
-    private String bytesToHex(
-            byte[] bytes
-    ) {
+    private String bytesToHex(byte[] bytes) {
 
-        StringBuilder sb =
-                new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
         for (byte b : bytes) {
-
-            sb.append(
-                    String.format(
-                            "%02X",
-                            b
-                    )
-            );
+            sb.append(String.format("%02X", b));
         }
-
         return sb.toString();
     }
 }

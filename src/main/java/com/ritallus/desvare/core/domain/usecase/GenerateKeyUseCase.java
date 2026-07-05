@@ -14,12 +14,9 @@ public class GenerateKeyUseCase {
     private final GpgGeneratorPort generatorPort;
     private final GpgKeyRepositoryPort repositoryPort;
 
-    public GpgKey execute(
-            GenerateKeyRequest generateKeyRequest
-    ) {
+    public GpgKey execute(GenerateKeyRequest generateKeyRequest) {
 
-        GeneratedKeyPair pair =
-                generatorPort.generate(generateKeyRequest);
+        GeneratedKeyPair pair = generatorPort.generate(generateKeyRequest);
 
         GpgKey key = new GpgKey(
                 null,
@@ -31,7 +28,6 @@ public class GenerateKeyUseCase {
         );
 
         repositoryPort.save(key);
-
         return key;
     }
 }

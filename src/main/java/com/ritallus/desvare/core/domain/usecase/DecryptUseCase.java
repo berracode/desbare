@@ -12,11 +12,7 @@ public class DecryptUseCase {
     private final GpgDecryptionPort decryptionPort;
     private final GpgKeyRepositoryPort repositoryPort;
 
-    public String execute(
-            String encryptedText,
-            String fingerprint,
-            String passphrase
-    ) {
+    public String execute(String encryptedText, String fingerprint, String passphrase) {
 
         GpgKey key = repositoryPort
                 .findByFingerprint(fingerprint)

@@ -35,11 +35,8 @@ public class SqliteGpgKeyRepositoryAdapter implements GpgKeyRepositoryPort {
                 VALUES (?,?,?,?,?,datetime('now'))
                 """;
 
-        try (
-                Connection con = dataSource.getConnection();
-                PreparedStatement ps =
-                        con.prepareStatement(sql)
-        ) {
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, key.name());
             ps.setString(2, key.email());
@@ -70,11 +67,9 @@ public class SqliteGpgKeyRepositoryAdapter implements GpgKeyRepositoryPort {
 
         List<GpgKey> keys = new ArrayList<>();
 
-        try (
-                Connection con = dataSource.getConnection();
-                PreparedStatement ps = con.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()
-        ) {
+        try (Connection con = dataSource.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 GpgKey key = new GpgKey(
                         rs.getLong("id"),
@@ -108,11 +103,8 @@ public class SqliteGpgKeyRepositoryAdapter implements GpgKeyRepositoryPort {
                 WHERE fingerprint = ?
                 """;
 
-        try (
-                Connection connection = dataSource.getConnection();
-                PreparedStatement statement =
-                        connection.prepareStatement(sql)
-        ) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, fingerprint);
 
@@ -135,13 +127,8 @@ public class SqliteGpgKeyRepositoryAdapter implements GpgKeyRepositoryPort {
 
                 return Optional.empty();
             }
-
         } catch (SQLException e) {
-
-            throw new RuntimeException(
-                    "Error consultando fingerprint: " + fingerprint,
-                    e
-            );
+            throw new RuntimeException("Error consultando fingerprint: " + fingerprint, e);
         }
     }
 

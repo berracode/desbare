@@ -34,13 +34,8 @@ public class ListKeysViewModel {
                 List<GpgKey> domainKeys = listGpgKeysUseCase.execute();
 
                 return domainKeys.stream().map(g -> {
-                    // 1. Codificar la llave completa a Base64 usando el servicio de dominio
                     String fullBase64 = base64Service.encode(g.publicKey());
 
-                    // 2. Truncar a 50 caracteres de manera segura si es lo suficientemente larga
-                    String shortBase64 = (fullBase64 != null && fullBase64.length() > 50)
-                            ? fullBase64.substring(0, 50) + "..."
-                            : fullBase64;
 
                     return GpgKeyDto.builder()
                             .fingerprint(g.fingerprint())

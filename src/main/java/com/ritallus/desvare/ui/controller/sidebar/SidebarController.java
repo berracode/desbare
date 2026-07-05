@@ -44,6 +44,7 @@ public class SidebarController {
         switch (toolTab.getName()) {
             case "GPG" -> btnGpg.getStyleClass().add("active");
             case "BASE64" -> btnBase64.getStyleClass().add("active");
+            default -> throw new RuntimeException("No hay estilos para este boton");
         }
 
         log.info("GPG classes: {}", btnGpg.getStyleClass());

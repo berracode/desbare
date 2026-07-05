@@ -77,24 +77,13 @@ public class CreateKeyController {
         lblStatus.textProperty()
                 .bind(createKeyViewModel.getStatus());
 
-        cbKeySize.valueProperty()
-                .bindBidirectional(
-                        createKeyViewModel.getKeySize()
-                );
+        cbKeySize.valueProperty().bindBidirectional(createKeyViewModel.getKeySize());
 
-        chkNeverExpire.selectedProperty()
-                .bindBidirectional(
-                        createKeyViewModel.getNeverExpire()
-                );
+        chkNeverExpire.selectedProperty().bindBidirectional(createKeyViewModel.getNeverExpire());
 
-        cbExpireAmount.valueProperty()
-                .bindBidirectional(
-                        createKeyViewModel.getExpirationAmount()
-                );
+        cbExpireAmount.valueProperty().bindBidirectional(createKeyViewModel.getExpirationAmount());
 
-        cbExpireUnit.valueProperty().bindBidirectional(
-                createKeyViewModel.getExpirationUnit()
-        );
+        cbExpireUnit.valueProperty().bindBidirectional(createKeyViewModel.getExpirationUnit());
 
         rbRsaRsa.selectedProperty().addListener(
                 (obs, oldValue, selected) -> {

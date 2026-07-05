@@ -26,142 +26,77 @@ import org.bouncycastle.openpgp.operator.jcajce.JcePBESecretKeyDecryptorBuilder;
 import org.bouncycastle.openpgp.operator.jcajce.JcePublicKeyDataDecryptorFactoryBuilder;
 
 @Slf4j
-public class BouncyCastleDecryptionAdapter
-        implements GpgDecryptionPort {
+public class BouncyCastleDecryptionAdapter implements GpgDecryptionPort {
 
     @Override
-    public String decrypt(
-            String encryptedText,
-            String armoredPrivateKey,
-            String passphrase
-    ) {
+    public String decrypt(String encryptedText, String armoredPrivateKey, String passphrase) {
 
         try {
+            PGPSecretKeyRing secretKeyRing = readSecretKeyRing(armoredPrivateKey);
 
-            PGPSecretKeyRing secretKeyRing =
-                    readSecretKeyRing(
-                            armoredPrivateKey
-                    );
+            InputStream decoderStream = PGPUtil.getDecoderStream(
+                    new ByteArrayInputStream(encryptedText.getBytes(StandardCharsets.UTF_8))
+            );
 
-            InputStream decoderStream =
-                    PGPUtil.getDecoderStream(
-                            new ByteArrayInputStream(
-                                    encryptedText.getBytes(
-                                            StandardCharsets.UTF_8
-                                    )
-                            )
-                    );
-
-            PGPObjectFactory factory =
-                    new PGPObjectFactory(
-                            decoderStream,
-                            new JcaKeyFingerprintCalculator()
-                    );
+            PGPObjectFactory factory = new PGPObjectFactory(decoderStream, new JcaKeyFingerprintCalculator());
 
             Object object = factory.nextObject();
-
             PGPEncryptedDataList encryptedDataList;
+
             if (object instanceof PGPEncryptedDataList list) {
                 encryptedDataList = list;
             } else {
-                encryptedDataList =
-                        (PGPEncryptedDataList)
-                                factory.nextObject();
+                encryptedDataList = (PGPEncryptedDataList) factory.nextObject();
             }
 
             PGPPrivateKey privateKey = null;
             PGPPublicKeyEncryptedData encryptedData = null;
 
-            Iterator<?> iterator =
-                    encryptedDataList.getEncryptedDataObjects();
+            Iterator<?> iterator = encryptedDataList.getEncryptedDataObjects();
 
             while (iterator.hasNext()) {
-
-                PGPPublicKeyEncryptedData candidate =
-                        (PGPPublicKeyEncryptedData)
-                                iterator.next();
-
-                PGPSecretKey secretKey =
-                        secretKeyRing.getSecretKey(
-                                candidate.getKeyID()
-                        );
+                PGPPublicKeyEncryptedData candidate = (PGPPublicKeyEncryptedData) iterator.next();
+                PGPSecretKey secretKey = secretKeyRing.getSecretKey(candidate.getKeyID());
 
                 if (secretKey != null) {
-
-                    privateKey =
-                            extractPrivateKey(
-                                    secretKey,
-                                    passphrase
-                            );
-
+                    privateKey = extractPrivateKey(secretKey, passphrase);
                     encryptedData = candidate;
-
                     break;
                 }
             }
 
             if (privateKey == null) {
-                throw new IllegalArgumentException(
-                        "No se encontró la llave privada."
-                );
+                throw new IllegalArgumentException("No se encontró la llave privada.");
             }
 
-            InputStream clearData =
-                    encryptedData.getDataStream(
-                            new JcePublicKeyDataDecryptorFactoryBuilder()
-                                    .build(privateKey)
-                    );
+            InputStream clearData = encryptedData.getDataStream(
+                    new JcePublicKeyDataDecryptorFactoryBuilder().build(privateKey)
+            );
 
-            PGPObjectFactory plainFactory =
-                    new PGPObjectFactory(
-                            clearData,
-                            new JcaKeyFingerprintCalculator()
-                    );
+            PGPObjectFactory plainFactory = new PGPObjectFactory(clearData, new JcaKeyFingerprintCalculator());
 
-
-            PGPLiteralData literalData1 =
-                    extractLiteralData(plainFactory);
-
+            PGPLiteralData literalData1 = extractLiteralData(plainFactory);
 
             if (literalData1 instanceof PGPLiteralData literalData) {
-
-                InputStream data =
-                        literalData.getInputStream();
-
-                return new String(
-                        data.readAllBytes(),
-                        StandardCharsets.UTF_8
-                );
+                InputStream data = literalData.getInputStream();
+                return new String(data.readAllBytes(), StandardCharsets.UTF_8);
             }
 
-            throw new IllegalStateException(
-                    "Contenido PGP no soportado."
-            );
+            throw new IllegalStateException("Contenido PGP no soportado.");
 
         } catch (Exception e) {
-
-            throw new RuntimeException(
-                    "Error descifrando mensaje",
-                    e
-            );
+            throw new RuntimeException("Error descifrando mensaje", e);
         }
     }
 
-    private PGPLiteralData extractLiteralData(
-            PGPObjectFactory factory
-    ) throws Exception {
+    private PGPLiteralData extractLiteralData(PGPObjectFactory factory) throws Exception {
 
         Object object;
 
         while ((object = factory.nextObject()) != null) {
 
             if (object instanceof PGPCompressedData compressed) {
-
-                factory = new PGPObjectFactory(
-                        compressed.getDataStream(),
-                        new JcaKeyFingerprintCalculator()
-                );
-
+                factory = new PGPObjectFactory(compressed.getDataStream(), new JcaKeyFingerprintCalculator());
                 continue;
             }
 
@@ -178,44 +113,27 @@ public class BouncyCastleDecryptionAdapter
             }
         }
 
-        throw new IllegalStateException(
-                "No se encontró PGPLiteralData"
-        );
+        throw new IllegalStateException("No se encontró PGPLiteralData");
     }
 
-    private PGPSecretKeyRing readSecretKeyRing(
-            String armoredPrivateKey
-    ) throws Exception {
+    private PGPSecretKeyRing readSecretKeyRing(String armoredPrivateKey) throws Exception {
 
-        InputStream in =
-                PGPUtil.getDecoderStream(
-                        new ByteArrayInputStream(
-                                armoredPrivateKey.getBytes(
-                                        StandardCharsets.UTF_8
-                                )
-                        )
-                );
+        InputStream in = PGPUtil.getDecoderStream(
+                new ByteArrayInputStream(armoredPrivateKey.getBytes(StandardCharsets.UTF_8))
+        );
 
-        PGPSecretKeyRingCollection collection =
-                new PGPSecretKeyRingCollection(
-                        in,
-                        new JcaKeyFingerprintCalculator()
-                );
+        PGPSecretKeyRingCollection collection = new PGPSecretKeyRingCollection(
+                in,
+                new JcaKeyFingerprintCalculator()
+        );
 
         return collection.getKeyRings().next();
     }
 
-    private PGPPrivateKey extractPrivateKey(
-            PGPSecretKey secretKey,
-            String passphrase
-    ) throws Exception {
+    private PGPPrivateKey extractPrivateKey(PGPSecretKey secretKey, String passphrase) throws Exception {
 
         return secretKey.extractPrivateKey(
-                new JcePBESecretKeyDecryptorBuilder()
-                        .build(
-                                passphrase.toCharArray()
-                        )
+                new JcePBESecretKeyDecryptorBuilder().build(passphrase.toCharArray())
         );
     }
 }
-

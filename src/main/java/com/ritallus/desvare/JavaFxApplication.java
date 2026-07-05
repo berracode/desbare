@@ -25,7 +25,7 @@ public class JavaFxApplication extends Application {
 
         MainTabsViewModel mainTabViewModel = new MainTabsViewModel();
 
-        AppBootstrap bootstrap = AppBootstrap.getInstance();
+        AppBootstrap.getInstance();
 
         loader.setControllerFactory(type -> {
             if (type == SidebarController.class) {

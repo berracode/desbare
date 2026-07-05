@@ -26,15 +26,8 @@ public class SqliteDatabaseInitializer {
                  );
                 """;
 
-        try (
-                Connection con =
-                        dataSource.getConnection();
-                Statement stmt =
-                        con.createStatement()
-        ) {
-
+        try (Connection con = dataSource.getConnection(); Statement stmt = con.createStatement()) {
             stmt.execute(sql);
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

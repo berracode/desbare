@@ -38,11 +38,8 @@ public class Base64ToolViewModel {
     public StringProperty decodeOutputProperty() {
         return decodeOutput;
     }
-    //esto puede estar en un servicio en la capa core
 
-    /**
-     * Lógica: Codificar texto plano a Base64
-     */
+
     public void encode() {
         String inputText = encodeInput.get();
         if (inputText == null || inputText.isBlank()) {
@@ -58,10 +55,7 @@ public class Base64ToolViewModel {
             encodeOutput.set("ERROR CRÍTICO: " + e.getMessage());
         }
     }
-
-    /**
-     * Lógica: Decodificar una cadena Base64 a texto plano
-     */
+    
     public void decode() {
         String inputText = decodeInput.get();
         if (inputText == null || inputText.isBlank()) {

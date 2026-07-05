@@ -13,24 +13,15 @@ public class SqliteDataSourceFactory {
     public DataSource create() {
 
         try {
-            Path directory = Paths.get(
-                    System.getProperty("user.home"),
-                    ".desvarapp"
-            );
+            Path directory = Paths.get(System.getProperty("user.home"), ".desvarapp");
 
             Files.createDirectories(directory);
 
-            String dbFile =
-                    directory.resolve("desvareDB.db")
-                            .toString();
+            String dbFile = directory.resolve("desvareDB.db").toString();
 
-            SQLiteDataSource ds =
-                    new SQLiteDataSource();
+            SQLiteDataSource ds = new SQLiteDataSource();
 
-            ds.setUrl(
-                    "jdbc:sqlite:" + dbFile
-            );
-
+            ds.setUrl("jdbc:sqlite:" + dbFile);
             return ds;
 
         } catch (IOException e) {

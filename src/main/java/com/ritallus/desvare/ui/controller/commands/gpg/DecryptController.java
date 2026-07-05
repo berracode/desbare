@@ -36,25 +36,13 @@ public class DecryptController {
     public void initialize() {
         log.info("Initialize DecryptController");
 
-        txtFingerprint.textProperty()
-                .bindBidirectional(
-                        viewModel.getFingerprint()
-                );
+        txtFingerprint.textProperty().bindBidirectional(viewModel.getFingerprint());
 
-        txtPassphrase.textProperty()
-                .bindBidirectional(
-                        viewModel.getPassphrase()
-                );
+        txtPassphrase.textProperty().bindBidirectional(viewModel.getPassphrase());
 
-        txtEncryptedText.textProperty()
-                .bindBidirectional(
-                        viewModel.getEncryptedText()
-                );
+        txtEncryptedText.textProperty().bindBidirectional(viewModel.getEncryptedText());
 
-        txtDecryptedText.textProperty()
-                .bind(
-                        viewModel.getDecryptedText()
-                );
+        txtDecryptedText.textProperty().bind(viewModel.getDecryptedText());
 
     }
 

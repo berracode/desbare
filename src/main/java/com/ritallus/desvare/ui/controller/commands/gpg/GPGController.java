@@ -48,6 +48,7 @@ public class GPGController {
             case "Cifrar" -> loadCommandView("encrypted.fxml", newTab.getText());
             case "Descifrar" -> loadCommandView("decrypted.fxml", newTab.getText());
             case "Listar llaves" -> loadCommandView("keys-list.fxml", newTab.getText());
+            default -> throw new RuntimeException("No existe vista para este Tab");
         }
     }
 
@@ -83,59 +84,15 @@ public class GPGController {
                 }
             });
 
-
-            // Ejemplo de controller factory manual:
-//            loader.setControllerFactory(type -> {
-//                if (podsViewModel == null) {
-//                    podsViewModel = new PodsViewModel(AppBootstrap.getInstance().getPodService());
-//                }
-//                if (type == PodsContentController.class) {
-//                    return new PodsContentController(podsViewModel);
-//                } else if (type == LogsContentController.class) {
-//                    var logViewModel = new LogsViewModel(AppBootstrap.getInstance().getLogsService());
-//                    return new LogsContentController(podsViewModel, logViewModel);
-//                }
-//
-//                try {
-//                    return type.getDeclaredConstructor().newInstance();
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-
             Node view = loader.load();
 
-            // Object controller = loader.getController();
-//            if (controller instanceof DeploymentTab) {
-//                ((DeploymentTab) controller).setDeploymentName(deploymentTabItemViewModel.deploymentName());
-//            }
-//
-//
-//            DeploymentContext ctx =
-//                    buildContextFromAppState(deploymentTabItemViewModel);
-//
-//            if (controller instanceof PodsContentController podsCtrl) {
-//                podsCtrl.setDeploymentContext(ctx);
-//            } else if (controller instanceof LogsContentController logsContentController) {
-//                logsContentController.setDeploymentContext(ctx);
-//
-//            }
-
-            var tabOptional =
-                    commandTabPane.getTabs().stream().filter(tab -> tab.getText().equals(tabTitle))
-                            .findFirst();//esto no estaba
-            if (tabOptional.isEmpty()) {//esto no estaba
+            var tabOptional = commandTabPane.getTabs().stream().filter(tab -> tab.getText().equals(tabTitle)).findFirst();
+            if (tabOptional.isEmpty()) {
                 throw new RuntimeException("No tab");
             }
             tabOptional.get().setContent(view);
             commandTabPane.getSelectionModel().select(tabOptional.get()); //esto no estaba
-
-
-//            commandContent.getChildren().setAll(view);
-//            AnchorPane.setTopAnchor(view, 0.0);
-//            AnchorPane.setBottomAnchor(view, 0.0);
-//            AnchorPane.setLeftAnchor(view, 0.0);
-//            AnchorPane.setRightAnchor(view, 0.0);
+            
         } catch (IOException e) {
             log.error("Error cargando vistas de GPG", e);
             e.printStackTrace();

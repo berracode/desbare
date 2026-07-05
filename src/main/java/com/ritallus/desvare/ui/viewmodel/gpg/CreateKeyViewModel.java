@@ -68,9 +68,6 @@ public class CreateKeyViewModel {
         var result =
                 useCase.execute(request);
 
-        status.set(
-                "Key generated: "
-                        + result.fingerprint()
-        );
+        status.set("Key generated: " + result.fingerprint());
     }
 }

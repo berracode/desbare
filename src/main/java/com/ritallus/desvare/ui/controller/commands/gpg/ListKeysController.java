@@ -58,9 +58,6 @@ public class ListKeysController {
         viewModel.loadKeys();
     }
 
-    /**
-     * Factory utilitario que reemplaza la celda común por un TextField plano e inmutable
-     */
     private TableCell<GpgKeyDto, String> createSelectableCell() {
         return new TableCell<>() {
             private final TextField textField = new TextField();

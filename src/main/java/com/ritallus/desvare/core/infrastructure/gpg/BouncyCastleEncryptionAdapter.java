@@ -31,135 +31,77 @@ public class BouncyCastleEncryptionAdapter
         implements GpgEncryptionPort {
 
     @Override
-    public String encrypt(
-            String plainText,
-            String armoredPublicKey
-    ) {
+    public String encrypt(String plainText, String armoredPublicKey) {
 
         try {
 
-            PGPPublicKey publicKey =
-                    readEncryptionKey(armoredPublicKey);
+            PGPPublicKey publicKey = readEncryptionKey(armoredPublicKey);
+            ByteArrayOutputStream encryptedOut = new ByteArrayOutputStream();
 
-            ByteArrayOutputStream encryptedOut =
-                    new ByteArrayOutputStream();
+            try (ArmoredOutputStream armoredOutput = new ArmoredOutputStream(encryptedOut)) {
 
-            try (
-                    ArmoredOutputStream armoredOutput =
-                            new ArmoredOutputStream(encryptedOut)
-            ) {
-
-                PGPEncryptedDataGenerator encryptedDataGenerator =
-                        new PGPEncryptedDataGenerator(
-                                new JcePGPDataEncryptorBuilder(
-                                        PGPEncryptedData.AES_256
-                                )
-                                        .setSecureRandom(
-                                                new SecureRandom()
-                                        )
-                                        .setWithIntegrityPacket(true)
-                        );
-
-                encryptedDataGenerator.addMethod(
-                        new JcePublicKeyKeyEncryptionMethodGenerator(
-                                publicKey
-                        )
+                PGPEncryptedDataGenerator encryptedDataGenerator = new PGPEncryptedDataGenerator(
+                        new JcePGPDataEncryptorBuilder(
+                                PGPEncryptedData.AES_256).setSecureRandom(
+                                        new SecureRandom())
+                                .setWithIntegrityPacket(true)
                 );
 
-                ByteArrayOutputStream literalData =
-                        new ByteArrayOutputStream();
+                encryptedDataGenerator.addMethod(new JcePublicKeyKeyEncryptionMethodGenerator(publicKey));
 
-                PGPLiteralDataGenerator literalDataGenerator =
-                        new PGPLiteralDataGenerator();
+                ByteArrayOutputStream literalData = new ByteArrayOutputStream();
 
-                try (OutputStream literalOut =
-                             literalDataGenerator.open(
-                                     literalData,
-                                     PGPLiteralData.BINARY,
-                                     PGPLiteralData.CONSOLE,
-                                     plainText.getBytes().length,
-                                     Date.valueOf(LocalDate.now())
-                             )) {
+                PGPLiteralDataGenerator literalDataGenerator = new PGPLiteralDataGenerator();
 
-                    literalOut.write(
-                            plainText.getBytes(
-                                    StandardCharsets.UTF_8
-                            )
-                    );
+                try (OutputStream literalOut = literalDataGenerator.open(
+                        literalData,
+                        PGPLiteralData.BINARY,
+                        PGPLiteralData.CONSOLE,
+                        plainText.getBytes().length,
+                        Date.valueOf(LocalDate.now())
+                )) {
+                    literalOut.write(plainText.getBytes(StandardCharsets.UTF_8));
                 }
 
                 byte[] bytes = literalData.toByteArray();
 
-                try (
-                        OutputStream encryptedStream =
-                                encryptedDataGenerator.open(
-                                        armoredOutput,
-                                        bytes.length
-                                )
-                ) {
-
+                try (OutputStream encryptedStream = encryptedDataGenerator.open(armoredOutput, bytes.length)) {
                     encryptedStream.write(bytes);
                 }
             }
 
-            return encryptedOut.toString(
-                    StandardCharsets.UTF_8
-            );
+            return encryptedOut.toString(StandardCharsets.UTF_8);
 
         } catch (Exception e) {
-            throw new RuntimeException(
-                    "Error cifrando contenido",
-                    e
-            );
+            throw new RuntimeException("Error cifrando contenido", e);
         }
     }
 
-    private PGPPublicKey readEncryptionKey(
-            String armoredPublicKey
-    ) throws Exception {
+    private PGPPublicKey readEncryptionKey(String armoredPublicKey) throws Exception {
 
-        try (
-                InputStream in =
-                        new ArmoredInputStream(
-                                new ByteArrayInputStream(
-                                        armoredPublicKey.getBytes(
-                                                StandardCharsets.UTF_8
-                                        )
-                                )
-                        )
-        ) {
+        try (InputStream in = new ArmoredInputStream(new ByteArrayInputStream(armoredPublicKey.getBytes(StandardCharsets.UTF_8)))) {
 
-            PGPPublicKeyRingCollection rings =
-                    new PGPPublicKeyRingCollection(
-                            PGPUtil.getDecoderStream(in),
-                            new JcaKeyFingerprintCalculator()
-                    );
+            PGPPublicKeyRingCollection rings = new PGPPublicKeyRingCollection(
+                    PGPUtil.getDecoderStream(in),
+                    new JcaKeyFingerprintCalculator()
+            );
 
-            Iterator<PGPPublicKeyRing> ringIterator =
-                    rings.getKeyRings();
+            Iterator<PGPPublicKeyRing> ringIterator = rings.getKeyRings();
 
             while (ringIterator.hasNext()) {
 
-                PGPPublicKeyRing ring =
-                        ringIterator.next();
+                PGPPublicKeyRing ring = ringIterator.next();
 
-                Iterator<PGPPublicKey> keys =
-                        ring.getPublicKeys();
+                Iterator<PGPPublicKey> keys = ring.getPublicKeys();
 
                 while (keys.hasNext()) {
-
-                    PGPPublicKey key =
-                            keys.next();
-
+                    PGPPublicKey key = keys.next();
                     if (key.isEncryptionKey()) {
                         return key;
                     }
                 }
             }
-
-            throw new IllegalArgumentException(
-                    "No se encontró una llave de cifrado."
-            );
+            throw new IllegalArgumentException("No se encontró una llave de cifrado.");
         }
     }
 }

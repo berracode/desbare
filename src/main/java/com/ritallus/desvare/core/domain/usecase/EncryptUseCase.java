@@ -12,22 +12,13 @@ public class EncryptUseCase {
     private final GpgEncryptionPort encryptionPort;
     private final GpgKeyRepositoryPort repositoryPort;
 
-    public String execute(
-            String plainText,
-            String recipientFingerprint
-    ) {
+    public String execute(String plainText, String recipientFingerprint) {
 
         GpgKey recipient =
                 repositoryPort
                         .findByFingerprint(recipientFingerprint)
-                        .orElseThrow(() ->
-                                             new IllegalArgumentException(
-                                                     "No existe la llave "
-                                                             + recipientFingerprint));
+                        .orElseThrow(() -> new IllegalArgumentException("No existe la llave " + recipientFingerprint));
 
-        return encryptionPort.encrypt(
-                plainText,
-                recipient.publicKey()
-        );
+        return encryptionPort.encrypt(plainText, recipient.publicKey());
     }
 }

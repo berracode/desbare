@@ -70,18 +70,6 @@ public class MainTabController {
             log.info("Inicia carga de: {}", fxmlPath);
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
 
-//            loader.setControllerFactory(type -> {
-//                if (type == DeploymentTabController.class) {
-//                    log.info("Instanciando deploymentTabController");
-//                    return new DeploymentTabController(deploymentTabItemViewModel, context);
-//                }
-//                try {
-//                    return type.getDeclaredConstructor().newInstance();
-//                } catch (Exception e) {
-//                    throw new RuntimeException("No puedo instanciar " + type, e);
-//                }
-//            });
-
             AnchorPane content = loader.load();
             Tab tab = new Tab(toolTab.getName(), content);
             tab.setUserData(toolTab);
