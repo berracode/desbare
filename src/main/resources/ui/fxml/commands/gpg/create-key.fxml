@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.ritallus.desvare.ui.controller.custom.button.LoadingButton?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -72,6 +73,10 @@
 
         <Region VBox.vgrow="ALWAYS" minHeight="10"/>
 
-        <Button onAction="#handleGenerateKey" text="Generar Llave" styleClass="btn-primary" maxWidth="200"/>
+        <LoadingButton fx:id="btnEncode"
+                       text="Generar Llave"
+                       styleClass="btn-primary"
+                       maxWidth="200"
+                       onAction="#handleGenerateKey"/>
     </VBox>
 </ScrollPane>

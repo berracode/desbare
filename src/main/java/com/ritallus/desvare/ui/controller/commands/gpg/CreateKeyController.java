@@ -2,6 +2,7 @@ package com.ritallus.desvare.ui.controller.commands.gpg;
 
 import com.ritallus.desvare.core.domain.enums.ExpirationUnit;
 import com.ritallus.desvare.core.domain.enums.KeyType;
+import com.ritallus.desvare.ui.controller.custom.button.LoadingButton;
 import com.ritallus.desvare.ui.viewmodel.gpg.CreateKeyViewModel;
 
 import javafx.fxml.FXML;
@@ -54,6 +55,8 @@ public class CreateKeyController {
 
     @FXML
     private Label lblStatus;
+    @FXML
+    private LoadingButton btnEncode;
 
 
     public CreateKeyController(CreateKeyViewModel createKeyViewModel) {
@@ -64,6 +67,8 @@ public class CreateKeyController {
     public void initialize() {
 
         log.info("Initialize CreateKeyController");
+        btnEncode.loadingProperty().bind(createKeyViewModel.getIsGenerating());
+
 
         txtName.textProperty()
                 .bindBidirectional(createKeyViewModel.getName());
@@ -74,8 +79,10 @@ public class CreateKeyController {
         txtPassphrase.textProperty()
                 .bindBidirectional(createKeyViewModel.getPassphrase());
 
-        lblStatus.textProperty()
-                .bind(createKeyViewModel.getStatus());
+        lblStatus.textProperty().bind(createKeyViewModel.getStatus());
+        // Si el mensaje está vacío, oculta el label por completo de la pantalla
+        lblStatus.visibleProperty().bind(createKeyViewModel.getStatus().isNotEmpty());
+        lblStatus.managedProperty().bind(lblStatus.visibleProperty());
 
         cbKeySize.valueProperty().bindBidirectional(createKeyViewModel.getKeySize());
 

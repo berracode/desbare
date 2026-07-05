@@ -8,6 +8,7 @@ module com.ritallus.desvare {
     requires org.xerial.sqlitejdbc;
     requires org.bouncycastle.pg;
     requires org.bouncycastle.provider;
+    requires javafx.graphics;
 
     opens com.ritallus.desvare to javafx.fxml;
     exports com.ritallus.desvare;

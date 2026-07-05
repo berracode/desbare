@@ -8,6 +8,7 @@ import java.security.Security;
 import java.util.Date;
 
 import com.ritallus.desvare.core.domain.enums.KeyType;
+import com.ritallus.desvare.core.domain.exception.custom.GeneratingKeyException;
 import com.ritallus.desvare.core.domain.model.GenerateKeyRequest;
 import com.ritallus.desvare.core.domain.model.GeneratedKeyPair;
 import com.ritallus.desvare.core.domain.ports.outbound.GpgGeneratorPort;
@@ -121,7 +122,8 @@ public class BouncyCastleGpgGeneratorAdapter implements GpgGeneratorPort {
             return new GeneratedKeyPair(publicKey, privateKey, fingerprint);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error generando llave OpenPGP", e);
+            log.error("Error generando KEY:", e);
+            throw new GeneratingKeyException("Error generando llave OpenPGP");
         }
     }
 
