@@ -19,31 +19,23 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateKeyViewModel {
 
-    private final StringProperty name =
-            new SimpleStringProperty();
+    private final StringProperty name = new SimpleStringProperty();
 
-    private final StringProperty email =
-            new SimpleStringProperty();
+    private final StringProperty email = new SimpleStringProperty();
 
-    private final StringProperty passphrase =
-            new SimpleStringProperty();
+    private final StringProperty passphrase = new SimpleStringProperty();
 
-    private final StringProperty status =
-            new SimpleStringProperty("Ready");
+    private final StringProperty status = new SimpleStringProperty("Ready");
 
-    private final ObjectProperty<Integer> keySize =
-            new SimpleObjectProperty<>(4096);
+    private final ObjectProperty<Integer> keySize = new SimpleObjectProperty<>(4096);
 
-    private final BooleanProperty neverExpire =
-            new SimpleBooleanProperty(true);
+    private final BooleanProperty neverExpire = new SimpleBooleanProperty(true);
 
-    private final ObjectProperty<Integer> expirationAmount =
-            new SimpleObjectProperty<>(1);
+    private final ObjectProperty<Integer> expirationAmount = new SimpleObjectProperty<>(1);
 
     private final ObjectProperty<ExpirationUnit> expirationUnit = new SimpleObjectProperty<>(ExpirationUnit.YEARS);
 
-    private final ObjectProperty<KeyType> keyType =
-            new SimpleObjectProperty<>(KeyType.RSA_RSA);
+    private final ObjectProperty<KeyType> keyType = new SimpleObjectProperty<>(KeyType.RSA_RSA);
 
     private final GenerateKeyUseCase useCase;
 
@@ -65,8 +57,7 @@ public class CreateKeyViewModel {
                         )
                         .build();
 
-        var result =
-                useCase.execute(request);
+        var result = useCase.execute(request);
 
         status.set("Key generated: " + result.fingerprint());
     }

@@ -83,6 +83,52 @@
     -fx-border-width: 1px;
 }
 
+/* Cuando está cargando, evitamos la opacidad por defecto de JavaFX*/
+.loading-button:disabled {
+    -fx-opacity: 0.3; /*TODO: no funciona*/
+}
+
+/* Forzamos que el texto mantenga buen contraste al procesar*/
+.loading-button:disabled .text {
+    -fx-fill: rgba(255, 255, 255, 1);
+}
+
+/* --- ESTILOS REFORZADOS DEL SPINNER --- */
+
+/* Color principal del arco en movimiento  == pepitas que se mueven*/
+.loading-button .progress-indicator {
+    -fx-progress-color: white;
+}
+
+.loading-button:disabled .progress-indicator  {
+    -fx-fill: rgba(255, 255, 255, 1);
+}
+
+/* Forzar que el ProgressIndicator indeterminado (-1) renderice su spinner interno  == donde se mueven las pepitas*/
+.loading-button .progress-indicator .spinner {
+    -fx-background-color: transparent;
+    -fx-border-color: #060209;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+}
+
+/* Forzar que el ProgressIndicator indeterminado (-1) renderice su spinner interno  == donde se mueven las pepitas*/
+.loading-button:disabled .progress-indicator .spinner {
+    -fx-background-color: transparent;
+    -fx-border-color: #060209;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50%;
+}
+
+/* Asegurar que la aguja/arco de progreso no se oculte */
+.loading-button .progress-indicator .progress {
+    -fx-background-color: white;
+}
+
+.loading-button {
+    -fx-graphic-text-gap: 8px;
+}
+
 /* --- ESTILIZACIÓN DEL TAB PANE (Tema Oscuro / Escala de Grises) --- */
 
 /* Contenedor principal del TabPane */

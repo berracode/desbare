@@ -14,6 +14,7 @@ module com.ritallus.desvare {
 
     //view models
     exports com.ritallus.desvare.ui.viewmodel.gpg.dto;
+    exports com.ritallus.desvare.ui.controller.custom.button;
 
     // Controladores
     exports com.ritallus.desvare.ui.controller; // opcional si otros módulos lo usan

@@ -55,11 +55,10 @@ public class Base64Controller {
 
             loader.setControllerFactory(type -> {
                 AppBootstrap bootstrap = AppBootstrap.getInstance();
-                Base64ToolViewModel base64Vm = bootstrap.base64ToolViewModel();
                 if (type == EncodeController.class) {
-                    return new EncodeController(base64Vm);
+                    return new EncodeController(new Base64ToolViewModel(bootstrap.getBase64ServicePort()));
                 } else if (type == DecodeController.class) {
-                    return new DecodeController(base64Vm);
+                    return new DecodeController(new Base64ToolViewModel(bootstrap.getBase64ServicePort()));
                 }
 
                 try {

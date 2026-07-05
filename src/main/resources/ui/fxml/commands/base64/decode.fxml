@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.ritallus.desvare.ui.controller.custom.button.LoadingButton?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
-
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/23.0.1"
       spacing="14"
@@ -21,7 +20,15 @@
     <TextArea fx:id="txtInputBase64" promptText="Ingresa el texto en base64"
               prefHeight="180" VBox.vgrow="ALWAYS"/>
 
-    <Button onAction="#handleDecode" text="Decodificar" styleClass="btn-primary" maxWidth="150"/>
+    <LoadingButton fx:id="btnEncode"
+                   text="Decodificar Base64"
+                   styleClass="btn-primary"
+                   maxWidth="150"
+                   onAction="#handleDecode"/>
+
+    <Label fx:id="lblError"
+           style="-fx-text-fill: #ef4444; -fx-font-weight: bold;"
+           wrapText="true"/>
 
     <TextArea fx:id="txtOutputText" promptText="Resultado decodificado..."
               editable="false"

@@ -24,6 +24,8 @@ import com.ritallus.desvare.ui.viewmodel.gpg.DecryptViewModel;
 import com.ritallus.desvare.ui.viewmodel.gpg.EncryptViewModel;
 import com.ritallus.desvare.ui.viewmodel.gpg.ListKeysViewModel;
 
+import lombok.Getter;
+
 public class AppBootstrap {
 
     private static final AppBootstrap INSTANCE =
@@ -36,6 +38,7 @@ public class AppBootstrap {
     private final GpgDecryptionPort decryptionPort;
 
     private final GpgKeyRepositoryPort repository;
+    @Getter
     private final Base64ServicePort base64ServicePort;
 
     private final GenerateKeyUseCase generateKeyUseCase;
@@ -91,10 +94,6 @@ public class AppBootstrap {
 
     public DecryptViewModel decryptViewModel() {
         return decryptViewModel;
-    }
-
-    public Base64ToolViewModel base64ToolViewModel() {
-        return base64ToolViewModel;
     }
 
     public ListKeysViewModel listKeysViewModel() {
